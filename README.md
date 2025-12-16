@@ -15,13 +15,13 @@ Si bien existen distritos consolidados con excelente calidad de vida, sus costos
 Este proyecto busca **redescubrir la ciudad**. A través del análisis de datos, identificamos zonas que ofrecen un **equilibrio óptimo entre costo y beneficio**.
 
 ### Nuestros objeivos
-* 1. Encontrar el mejor distrito para vivir comparando el precio de alquiler con la calidad de vida.
-* 2. Integrar una plataforma que sea fácil de utilizar al identificar lugares de interés para cada usuario.
-* 3. Ofrecer recomendaciones en base a las valoraciones de anteriores residentes para nuevos usuarios.
+* Encontrar el mejor distrito para vivir comparando el precio de alquiler con la calidad de vida.
+* Integrar una plataforma que sea fácil de utilizar al identificar lugares de interés para cada usuario.
+* Ofrecer recomendaciones en base a las valoraciones de anteriores residentes para nuevos usuarios.
 
 ### Fuentes de datos
-* 1. Api de Google Places: “Descubrimiento de zonas”
-  2. Geoapify un API de geolocalización y mapas por alojamiento
-  3. Web scraping: Urbania 
+* Api de Google Places: “Descubrimiento de zonas”
+* Geoapify un API de geolocalización y mapas por alojamiento
+* Web scraping: Urbania 
 
 
