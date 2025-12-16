@@ -3,10 +3,10 @@ Una página que muestre el análisis comparativo del mercado inmobiliario y cali
 ## 🎯 Relevancia y Aporte Social
 
 ### 🏙️ El Contexto: Lima
-Lima es una ciudad compleja y heterogénea. Al buscar vivienda, la mayoría de las personas se enfrenta a una asimetría de información: **suelen basar su decisión únicamente en el precio de alquiler o venta**, ignorando factores que definen el día a día.
+Lima es una ciudad compleja y buscar vivienda no es la excepción, la mayoría de las personas se enfrenta a una asimetría de información: **suelen basar su decisión únicamente en el precio de alquiler o venta**, ignorando factores que definen el día a día.
 
 ### 🚩 El Problema
-Si bien existen distritos consolidados ("Lima Top") con excelente calidad de vida, sus costos son prohibitivos para gran parte de la población. Esto empuja a los ciudadanos a zonas más económicas, sacrificando a menudo acceso a servicios vitales como:
+Si bien existen distritos consolidados con excelente calidad de vida, sus costos son inalcanzables para gran parte de la población, esto empuja a los ciudadanos a zonas más económicas, sacrificando a menudo acceso a servicios vitales como:
 * 🛡️ Seguridad ciudadana
 * 🍽️ Oferta gastronómica
 * 🎭 Esparcimiento y diversión
@@ -14,4 +14,14 @@ Si bien existen distritos consolidados ("Lima Top") con excelente calidad de vid
 ### 💡 Nuestra Propuesta de Valor
 Este proyecto busca **redescubrir la ciudad**. A través del análisis de datos, identificamos zonas que ofrecen un **equilibrio óptimo entre costo y beneficio**.
 
-El objetivo es demostrar que **una alta calidad de vida no tiene por qué ser impagable**, localizando "joyas ocultas" en diversos distritos que cuentan con los servicios necesarios para vivir bien, sin los sobrecostos de las zonas tradicionales.
+### Nuestros objeivos
+* 1. Encontrar el mejor distrito para vivir comparando el precio de alquiler con la calidad de vida.
+* 2. Integrar una plataforma que sea fácil de utilizar al identificar lugares de interés para cada usuario.
+* 3. Ofrecer recomendaciones en base a las valoraciones de anteriores residentes para nuevos usuarios.
+
+### Fuentes de datos
+* 1. Api de Google Places: “Descubrimiento de zonas”
+  2. Geoapify un API de geolocalización y mapas por alojamiento
+  3. Web scraping: Urbania 
+
+
