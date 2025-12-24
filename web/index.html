@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏡 Lima Housing Analytics - Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-home"></i>
+                <h1>Lima Housing Analytics</h1>
+            </div>
+            <p class="tagline">Encuentra tu mejor lugar para vivir en Lima</p>
+        </header>
+
+        <!-- STATS BAR -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <i class="fas fa-building"></i>
+                <div>
+                    <h3 id="total-props">126</h3>
+                    <p>Propiedades</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <div>
+                    <h3 id="total-districts">10</h3>
+                    <p>Distritos</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <div>
+                    <h3 id="avg-score">8.4</h3>
+                    <p>Score Promedio</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-money-bill-wave"></i>
+                <div>
+                    <h3 id="avg-price">S/ 2,821</h3>
+                    <p>Precio Promedio</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- LEFT: FILTERS & CONTROLS -->
+            <div class="sidebar">
+                <div class="filter-section">
+                    <h3><i class="fas fa-filter"></i> Filtros</h3>
+                    
+                    <div class="filter-group">
+                        <label for="districtFilter"><i class="fas fa-map-pin"></i> Distrito</label>
+                        <select id="districtFilter" class="filter-select">
+                            <option value="all">Todos los distritos</option>
+                            <!-- Se llena con JS -->
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="priceFilter"><i class="fas fa-money-bill"></i> Precio Máx: <span id="priceValue">S/ 7000</span></label>
+                        <input type="range" id="priceFilter" min="800" max="7000" value="7000" class="filter-slider">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="scoreFilter"><i class="fas fa-star"></i> Score Mín: <span id="scoreValue">5.0</span></label>
+                        <input type="range" id="scoreFilter" min="5" max="10" step="0.5" value="5" class="filter-slider">
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="bedroomsFilter"><i class="fas fa-bed"></i> Habitaciones</label>
+                        <select id="bedroomsFilter" class="filter-select">
+                            <option value="0">Cualquiera</option>
+                            <option value="1">1+</option>
+                            <option value="2">2+</option>
+                            <option value="3">3+</option>
+                            <option value="4">4+</option>
+                        </select>
+                    </div>
+
+                    <button id="resetFilters" class="btn-reset">
+                        <i class="fas fa-redo"></i> Reiniciar Filtros
+                    </button>
+                </div>
+
+                <!-- TOP DISTRICTS -->
+                <div class="top-districts">
+                    <h3><i class="fas fa-trophy"></i> Top 5 Distritos</h3>
+                    <div id="topDistrictsList">
+                        <!-- Se llena con JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: PROPERTIES GRID -->
+            <div class="content">
+                <div class="content-header">
+                    <h2><i class="fas fa-list"></i> Propiedades Encontradas: <span id="propsCount">126</span></h2>
+                    <div class="sort-controls">
+                        <label for="sortSelect"><i class="fas fa-sort"></i> Ordenar por:</label>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="score">Mejor Score</option>
+                            <option value="price-low">Precio (Bajo a Alto)</option>
+                            <option value="price-high">Precio (Alto a Bajo)</option>
+                            <option value="area">Área Mayor</option>
+                            <option value="district">Distrito A-Z</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- PROPERTIES GRID -->
+                <div class="properties-grid" id="propertiesContainer">
+                    <!-- Las propiedades se cargan aquí con JavaScript -->
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando propiedades...</p>
+                    </div>
+                </div>
+
+                <!-- PROPERTY DETAIL MODAL (oculto inicialmente) -->
+                <div id="propertyModal" class="modal">
+                    <div class="modal-content">
+                        <span class="close-modal">&times;</span>
+                        <div id="modalContent">
+                            <!-- Contenido dinámico -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p><strong>Lima Housing Analytics</strong> | Proyecto Final LP2 - Análisis de Precios Inmobiliarios vs. Calidad de Vida</p>
+            <p class="data-info">
+                <i class="fas fa-database"></i> 
+                <span id="dataSource">126 propiedades (6 reales de Urbania + 120 muestra)</span>
+            </p>
+            <p class="formula-info">
+                <i class="fas fa-calculator"></i> 
+                Fórmula de Scoring: (Costo×0.4 + Seguridad×0.4 + Servicios×0.2)
+            </p>
+        </footer>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
