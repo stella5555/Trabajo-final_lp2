@@ -362,4 +362,272 @@ document.addEventListener('DOMContentLoaded', function() {
                 filteredProperties.sort((a, b) => b.price - a.price);
                 break;
             case 'area':
-                filteredProperties.sort((a, b)
+                filteredProperties.sort((a, b)=> b.area - a.area);
+                break;
+            case 'district':
+                filteredProperties.sort((a, b) => a.district.localeCompare(b.district));
+                break;
+        }
+        
+        // Actualizar contador
+        elements.propsCount.textContent = filteredProperties.length;
+        
+        // Renderizar propiedades
+        renderProperties();
+    }
+    
+    // ======================
+    // 7. RENDERIZAR PROPIEDADES
+    // ======================
+    function renderProperties() {
+        if (filteredProperties.length === 0) {
+            elements.propertiesContainer.innerHTML = `
+                <div class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>No se encontraron propiedades</h3>
+                    <p>Prueba ajustando los filtros</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        
+        filteredProperties.forEach(property => {
+            // Determinar icono de fuente
+            const sourceIcon = property.source === 'urbania_real' 
+                ? '<i class="fas fa-check-circle"></i> Real'
+                : '<i class="fas fa-database"></i> Muestra';
+            
+            const sourceClass = property.source === 'urbania_real' ? 'source-real' : 'source-sample';
+            
+            html += `
+                <div class="property-card" data-id="${property.id}">
+                    <div class="property-header">
+                        <div>
+                            <div class="property-district">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${property.district}
+                            </div>
+                            <div class="property-address">
+                                <i class="fas fa-home"></i>
+                                ${property.address}
+                            </div>
+                        </div>
+                        <div class="property-price">
+                            S/ ${property.price.toLocaleString()}
+                        </div>
+                    </div>
+                    
+                    <div class="property-body">
+                        <div class="property-features">
+                            <div class="feature">
+                                <i class="fas fa-ruler-combined"></i>
+                                <div class="feature-value">${property.area}</div>
+                                <div class="feature-label">m²</div>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-bed"></i>
+                                <div class="feature-value">${property.bedrooms}</div>
+                                <div class="feature-label">Hab</div>
+                            </div>
+                            <div class="feature">
+                                <i class="fas fa-bath"></i>
+                                <div class="feature-value">${property.bathrooms}</div>
+                                <div class="feature-label">Baños</div>
+                            </div>
+                        </div>
+                        
+                        <div class="property-scores">
+                            <div class="score-item">
+                                <div class="score-label">Seguridad</div>
+                                <div class="score-value">${property.safety_score}</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-label">Servicios</div>
+                                <div class="score-value">${property.services_score}</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-label">Costo</div>
+                                <div class="score-value">${property.cost_score}</div>
+                            </div>
+                            <div class="score-item">
+                                <div class="score-label">FINAL</div>
+                                <div class="score-value score-final">${property.final_score}</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="property-footer">
+                        <div class="property-source ${sourceClass}">
+                            ${sourceIcon}
+                        </div>
+                        <button class="view-details" onclick="showPropertyDetails('${property.id}')">
+                            <i class="fas fa-eye"></i> Ver Detalles
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        elements.propertiesContainer.innerHTML = html;
+    }
+    
+    // ======================
+    // 8. MOSTRAR DETALLES DE PROPIEDAD
+    // ======================
+    window.showPropertyDetails = function(propertyId) {
+        const property = allProperties.find(p => p.id === propertyId);
+        if (!property) return;
+        
+        const amenities = [];
+        if (property.parking) amenities.push('Estacionamiento');
+        if (property.furnished) amenities.push('Amueblado');
+        if (property.pet_friendly) amenities.push('Mascotas permitidas');
+        
+        elements.modalContent.innerHTML = `
+            <div class="modal-property">
+                <div class="modal-header">
+                    <h2><i class="fas fa-home"></i> ${property.title}</h2>
+                    <div class="modal-price">S/ ${property.price.toLocaleString()}</div>
+                </div>
+                
+                <div class="modal-info-grid">
+                    <div class="info-card">
+                        <h3><i class="fas fa-map-marker-alt"></i> Ubicación</h3>
+                        <p><strong>Distrito:</strong> ${property.district}</p>
+                        <p><strong>Dirección:</strong> ${property.address}</p>
+                        <p><strong>Coordenadas:</strong> ${property.latitude}, ${property.longitude}</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-info-circle"></i> Características</h3>
+                        <p><strong>Área:</strong> ${property.area} m² (S/ ${property.price_per_m2}/m²)</p>
+                        <p><strong>Habitaciones:</strong> ${property.bedrooms}</p>
+                        <p><strong>Baños:</strong> ${property.bathrooms}</p>
+                        <p><strong>Amenidades:</strong> ${amenities.join(', ') || 'Ninguna'}</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-chart-bar"></i> Puntajes Detallados</h3>
+                        <div class="score-breakdown">
+                            <div class="score-row">
+                                <span>Seguridad:</span>
+                                <span>${property.safety_score}/10 × 0.4 = ${(property.safety_score * 0.4).toFixed(2)}</span>
+                            </div>
+                            <div class="score-row">
+                                <span>Servicios:</span>
+                                <span>${property.services_score}/10 × 0.2 = ${(property.services_score * 0.2).toFixed(2)}</span>
+                            </div>
+                            <div class="score-row">
+                                <span>Costo:</span>
+                                <span>${property.cost_score}/10 × 0.4 = ${(property.cost_score * 0.4).toFixed(2)}</span>
+                            </div>
+                            <div class="score-row total">
+                                <span><strong>SCORE FINAL:</strong></span>
+                                <span><strong>${property.final_score}/10</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h3><i class="fas fa-database"></i> Fuente de Datos</h3>
+                        <p><strong>Origen:</strong> ${property.source === 'urbania_real' ? 'Extraído de Urbania.pe' : 'Datos de muestra sintéticos'}</p>
+                        <p><strong>ID:</strong> ${property.id}</p>
+                        <p><strong>Descripción:</strong> ${property.description}</p>
+                    </div>
+                </div>
+                
+                <div class="modal-formula">
+                    <h3><i class="fas fa-calculator"></i> Fórmula de Scoring Aplicada</h3>
+                    <div class="formula-display">
+                        <code>
+                            Score Final = (Costo × 0.4) + (Seguridad × 0.4) + (Servicios × 0.2)<br>
+                            ${property.final_score} = (${property.cost_score} × 0.4) + (${property.safety_score} × 0.4) + (${property.services_score} × 0.2)
+                        </code>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        elements.propertyModal.style.display = 'flex';
+    };
+    
+    // ======================
+    // 9. MOSTRAR TOP DISTRITOS
+    // ======================
+    function showTopDistricts() {
+        // Calcular score promedio por distrito
+        const districtScores = {};
+        
+        allProperties.forEach(property => {
+            if (!districtScores[property.district]) {
+                districtScores[property.district] = {
+                    total: 0,
+                    count: 0,
+                    avg: 0
+                };
+            }
+            districtScores[property.district].total += property.final_score;
+            districtScores[property.district].count += 1;
+        });
+        
+        // Calcular promedios
+        Object.keys(districtScores).forEach(district => {
+            districtScores[district].avg = districtScores[district].total / districtScores[district].count;
+        });
+        
+        // Ordenar por score promedio
+        const sortedDistricts = Object.keys(districtScores)
+            .map(district => ({
+                name: district,
+                score: districtScores[district].avg
+            }))
+            .sort((a, b) => b.score - a.score)
+            .slice(0, 5);
+        
+        // Renderizar
+        let html = '';
+        sortedDistricts.forEach((district, index) => {
+            const medal = index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : `${index + 1}.`;
+            html += `
+                <div class="district-item">
+                    <div class="district-name">
+                        ${medal} ${district.name}
+                    </div>
+                    <div class="district-score">
+                        ${district.score.toFixed(1)}
+                    </div>
+                </div>
+            `;
+        });
+        
+        elements.topDistrictsList.innerHTML = html;
+    }
+    
+    // ======================
+    // 10. REINICIAR FILTROS
+    // ======================
+    function resetFilters() {
+        elements.districtFilter.value = 'all';
+        elements.priceFilter.value = 7000;
+        elements.priceValue.textContent = 'S/ 7000';
+        elements.scoreFilter.value = 5;
+        elements.scoreValue.textContent = '5.0';
+        elements.bedroomsFilter.value = '0';
+        elements.sortSelect.value = 'score';
+        
+        applyFilters();
+    }
+    
+    // ======================
+    // 11. INICIALIZAR
+    // ======================
+    function init() {
+        console.log('🚀 Dashboard Lima Housing Analytics iniciado');
+        loadProperties();
+    }
+    
+    // Iniciar la aplicación
+    init();
+});
