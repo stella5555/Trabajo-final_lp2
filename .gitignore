@@ -1,0 +1,24 @@
+# ===== ENTORNO VIRTUAL =====
+.venv/
+venv/
+env/
+.vscode/
+__pycache__/
+
+# ===== CAPTURAS DE PANTALLA DEBUG =====
+debug_*.png
+debug_*.jpg
+
+# ===== DATOS SENSIBLES =====
+*.env
+*.key
+*.secret
+
+# ===== DATOS CRUDOS (opcional, si son grandes) =====
+data/raw/*.csv
+# Pero SÍ quieres subir urbania_properties.csv (tus 6 datos reales)
+# Así que mejor NO ignores todos los CSV
+
+# ===== SISTEMA =====
+.DS_Store
+Thumbs.db

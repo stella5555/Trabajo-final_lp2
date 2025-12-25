@@ -2,7 +2,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
-from scripts.scraper_urbania import main as scrape_urbania
+from scripts.legacy.scraper_urbania import main as scrape_urbania
 from scripts.api_google import GoogleMapsAPI
 from scripts.data_processor import DataProcessor
 
@@ -13,7 +13,7 @@ def main():
     
     # 1. Scraping de Urbania
     print("\n1️⃣  EJECUTANDO SCRAPER DE URBANIA...")
-    from scripts.scraper_urbania import main as scrape_main
+    from scripts.legacy.scraper_urbania import main as scrape_main
     scrape_main()
     
     # 2. Procesar datos (esto se completará después)

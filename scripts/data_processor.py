@@ -186,6 +186,8 @@ def main():
         
         web_output = 'web/data/properties.json'
         os.makedirs(os.path.dirname(web_output), exist_ok=True)
+        # JSON no acepta NaN → convertir a null
+        df_scored = df_scored.where(pd.notna(df_scored), None)
         df_scored.to_json(
             web_output,
             orient='records',

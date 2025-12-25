@@ -22,6 +22,11 @@ Este proyecto busca **redescubrir la ciudad**. A través del análisis de datos,
 ### 📊 Fuentes de datos
 * Api de Google Places: “Descubrimiento de zonas”
 * Geoapify un API de geolocalización y mapas por alojamiento
-* Web scraping: Urbania 
+* Web scraping: Urbania
+* Este proyecto utiliza el dataset "Análisis de alquiler de inmuebles de la ciudad de Lima-Perú a través de la plataforma Properati" publicado por:
+
+Enriquez Lira, J. C., & Mucha Morales, F. A. (2023). Dataset: Análisis de alquiler de inmuebles de la ciudad de Lima-Perú a través de la plataforma Properati [Data set]. Zenodo. https://doi.org/10.5281/zenodo.7846211
+
+Licencia: Creative Commons Attribution 4.0 International (CC-BY 4.0)
 
 
