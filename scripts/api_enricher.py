@@ -1,96 +1,144 @@
-# scripts/api_enricher.py
+# scripts/api_enricher.py - VERSIÓN MEJORADA
 import pandas as pd
 import requests
 import time
+import json
 import os
+from geopy.geocoders import Nominatim
+from geopy.exc import GeocoderTimedOut, GeocoderServiceError
 
-def enrich_with_osm(csv_path='data/processed/scored_properties.csv', sample_size=15):
-    """
-    Toma el CSV con scores y agrega coordenadas usando API OpenStreetMap.
-    Solo procesa 'sample_size' propiedades para no saturar la API.
-    """
-    print("🌍 CONECTANDO CON API OPENSTREETMAP...")
+print("🌍 API ENRICHER - Mejorado para Lima")
+print("="*50)
+
+def safe_geocode(location, geolocator, retries=3):
+    """Geocodificación segura con reintentos"""
+    if not location or pd.isna(location):
+        return None
     
-    # Cargar los datos ya procesados
-    df = pd.read_csv(csv_path, encoding='utf-8')
-    print(f"   📊 {len(df)} propiedades cargadas")
+    for attempt in range(retries):
+        try:
+            # Primero intentar con el nombre completo
+            result = geolocator.geocode(location, timeout=10)
+            if result:
+                return result
+            
+            # Si falla, extraer solo el distrito
+            parts = location.split(',')
+            if len(parts) > 1:
+                district = parts[1].strip() + ", Lima, Perú"
+                result = geolocator.geocode(district, timeout=10)
+                if result:
+                    return result
+            
+            # Último intento: solo "Lima, Perú"
+            result = geolocator.geocode("Lima, Perú", timeout=10)
+            return result
+            
+        except (GeocoderTimedOut, GeocoderServiceError) as e:
+            if attempt < retries - 1:
+                time.sleep(1)
+                continue
+            print(f"⚠️  Error geocoding {location}: {e}")
+            return None
     
-    # Inicializar columnas para coordenadas
+    return None
+
+def main():
+    # Cargar propiedades procesadas
+    input_path = "data/processed/scored_properties.csv"
+    
+    if not os.path.exists(input_path):
+        print(f"❌ No se encontró: {input_path}")
+        print("💡 Ejecuta primero: python scripts/data_processor.py")
+        return
+    
+    df = pd.read_csv(input_path)
+    print(f"📊 {len(df)} propiedades cargadas")
+    
+    # Inicializar geocodificador
+    geolocator = Nominatim(user_agent="lima_housing_analytics")
+    
+    # Columnas para coordenadas
     df['latitude'] = None
     df['longitude'] = None
     df['osm_data'] = None
     
-    # Contador para límite de API
-    processed = 0
+    # Contadores
+    found = 0
+    not_found = 0
     
-    for idx, row in df.head(sample_size).iterrows():
-        try:
-            # Extraer la dirección básica (primer elemento antes de la primera coma)
-            location_parts = str(row['location']).split(',')
-            if len(location_parts) > 0:
-                query_location = location_parts[0].strip()
-                
-                # Construir consulta para API
-                url = "https://nominatim.openstreetmap.org/search"
-                params = {
-                    'q': f"{query_location}, Lima, Peru",
-                    'format': 'json',
-                    'limit': 1,
-                    'countrycodes': 'PE'  # Solo Perú
-                }
-                headers = {
-                    'User-Agent': 'Lima-Housing-Analytics-Project/1.0 (https://github.com/tu-usuario/tu-repo)'
-                }
-                
-                # Hacer la petición a la API
-                response = requests.get(url, params=params, headers=headers, timeout=10)
-                
-                if response.status_code == 200:
-                    data = response.json()
-                    if data:
-                        # Guardar coordenadas y datos adicionales
-                        df.at[idx, 'latitude'] = float(data[0]['lat'])
-                        df.at[idx, 'longitude'] = float(data[0]['lon'])
-                        df.at[idx, 'osm_data'] = str(data[0].get('display_name', ''))
-                        
-                        print(f"   ✅ {query_location}: {data[0]['lat']}, {data[0]['lon']}")
-                        processed += 1
-                    else:
-                        print(f"   ⚠️  {query_location}: No encontrado en OSM")
-                else:
-                    print(f"   ❌ Error API: código {response.status_code}")
-            
-            # Pausa para ser respetuoso con la API (1 solicitud por segundo)
-            time.sleep(1.2)
-            
-            # Detener si alcanzamos el límite
-            if processed >= sample_size:
-                break
-                
-        except Exception as e:
-            print(f"   ❌ Error con {row.get('location', 'desconocido')}: {str(e)}")
+    print("\n📍 Buscando coordenadas...")
+    print("-"*40)
+    
+    # Procesar cada propiedad
+    for idx, row in df.iterrows():
+        location = row.get('location', '')
+        
+        if pd.isna(location) or not location:
+            not_found += 1
             continue
+        
+        # Intentar geocodificación
+        result = safe_geocode(str(location), geolocator)
+        
+        if result:
+            df.at[idx, 'latitude'] = result.latitude
+            df.at[idx, 'longitude'] = result.longitude
+            df.at[idx, 'osm_data'] = result.address
+            found += 1
+            
+            if found <= 5:  # Mostrar primeros éxitos
+                print(f"✅ {location[:40]}... → {result.latitude:.4f}, {result.longitude:.4f}")
+        else:
+            not_found += 1
+            if not_found <= 5:  # Mostrar primeros fallos
+                print(f"⚠️  No encontrado: {location[:40]}...")
+        
+        # Pausa para no saturar la API
+        time.sleep(1)
+        
+        # Mostrar progreso cada 50 propiedades
+        if (idx + 1) % 50 == 0:
+            print(f"📈 Progreso: {idx + 1}/{len(df)} ({found} encontradas)")
     
-    # Guardar resultados enriquecidos
-    output_path = 'data/processed/enriched_properties.csv'
-    df.to_csv(output_path, index=False, encoding='utf-8-sig')
+    print("\n" + "="*50)
+    print("📊 RESULTADOS:")
+    print(f"   ✅ Encontradas: {found} propiedades")
+    print(f"   ⚠️  No encontradas: {not_found} propiedades")
+    print(f"   📍 Tasa de éxito: {(found/len(df)*100):.1f}%")
     
-    print(f"\n✅ ENRIQUECIMIENTO COMPLETADO")
-    print(f"   📍 {processed} propiedades con coordenadas")
-    print(f"   💾 Guardado en: {output_path}")
+    # Guardar CSV enriquecido
+    output_csv = "data/processed/enriched_properties.csv"
+    df.to_csv(output_csv, index=False, encoding='utf-8')
+    print(f"\n💾 CSV guardado: {output_csv}")
     
-    # También guardar como JSON para el frontend
-    json_path = 'web/data/properties.json'
-    os.makedirs(os.path.dirname(json_path), exist_ok=True)
+    # Crear JSON para frontend (solo propiedades con coordenadas)
+    properties_with_coords = df[df['latitude'].notna()].to_dict('records')
     
-    # Convertir a JSON (solo las propiedades con coordenadas)
-    df_with_coords = df.dropna(subset=['latitude', 'longitude'])
-    if not df_with_coords.empty:
-        df_with_coords.to_json(json_path, orient='records', force_ascii=False)
-        print(f"   📄 JSON para frontend: {json_path}")
+    output_json = "web/data/properties.json"
+    os.makedirs(os.path.dirname(output_json), exist_ok=True)
     
-    return df
+    with open(output_json, 'w', encoding='utf-8') as f:
+        json.dump(properties_with_coords, f, indent=2, ensure_ascii=False)
+    
+    print(f"📄 JSON guardado: {output_json}")
+    print(f"   (con {len(properties_with_coords)} propiedades con coordenadas)")
+    
+    # Mostrar estadísticas por distrito
+    print("\n🏙️  ESTADÍSTICAS POR DISTRITO:")
+    print("-"*40)
+    
+    df['has_coords'] = df['latitude'].notna()
+    stats = df.groupby('district').agg(
+        total=('district', 'size'),
+        with_coords=('has_coords', 'sum'),
+        avg_score=('final_score', 'mean')
+    ).round(2)
+    
+    stats['success_rate'] = (stats['with_coords'] / stats['total'] * 100).round(1)
+    print(stats.sort_values('success_rate', ascending=False).head(10))
+    
+    print("\n✅ ENRIQUECIMIENTO COMPLETADO")
 
 if __name__ == "__main__":
-    # Ejecutar con tamaño de muestra pequeño (15 propiedades)
-    enrich_with_osm(sample_size=15)
+    main()

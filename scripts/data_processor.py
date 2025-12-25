@@ -3,54 +3,31 @@ import os
 import re
 
 def clean_price(price_str):
-    """
-    Convierte precios como 'USD900', 'S/.3,100' o 'S/.1,800' a float (en soles)
-    """
     if pd.isna(price_str):
         return None
-    
-    price_str = str(price_str).strip()
-    
-    # Caso 1: USD (convertir a soles)
+
+    price_str = str(price_str).upper().strip()
+
+    # Extraer número
+    number_match = re.search(r'(\d+\.?\d*)', price_str)
+    if not number_match:
+        return None
+
+    value = float(number_match.group(1))
+
+    # Detectar moneda
     if 'USD' in price_str:
-        price_str = price_str.replace('USD', '').replace(',', '')
-        try:
-            return float(price_str) * 3.7  # Tipo de cambio aprox
-        except:
-            return None
-    
-    # Caso 2: Soles (S/. o S/)
-    elif 'S/.' in price_str or 'S/' in price_str:
-        price_str = re.sub(r'S/\.?\s*', '', price_str)  # Remover S/. o S/
-        price_str = price_str.replace(',', '')
-        try:
-            return float(price_str)
-        except:
-            return None
-    
-    # Caso 3: Solo números (intentar convertir)
+        return value * 3.7  # tipo de cambio
     else:
-        try:
-            return float(str(price_str).replace(',', ''))
-        except:
-            return None
+        return value  # asumir soles
+
 
 def clean_area(area_str):
-    """
-    Convierte área como '103 mÂ²' o '151 m²' a float
-    """
     if pd.isna(area_str):
         return None
-    
-    area_str = str(area_str).strip()
-    # Extraer solo los números (y punto decimal)
-    match = re.search(r'(\d+\.?\d*)', area_str)
-    if match:
-        try:
-            return float(match.group(1))
-        except:
-            return None
-    return None
+
+    match = re.search(r'(\d+\.?\d*)', str(area_str))
+    return float(match.group(1)) if match else None
 
 def clean_bedroom_bathroom(value):
     """
@@ -77,7 +54,10 @@ def calculate_scores(df):
     
     # 1. LIMPIAR TODAS LAS COLUMNAS RELEVANTES
     print("🧹 Limpiando datos...")
-    
+    df['cost_score'] = 5
+    df['safety_score'] = 3
+    df['services_score'] = 5
+
     # Precio (convertir todo a soles)
     df['price_clean'] = df['price'].apply(clean_price)
     print(f"   Precios convertidos: {df['price_clean'].notna().sum()}/{len(df)} válidos")
@@ -91,7 +71,11 @@ def calculate_scores(df):
     df['bathroom_clean'] = df['bathroom'].apply(clean_bedroom_bathroom)
     
     # Año de construcción
-    df['year_contruction'] = pd.to_numeric(df['year_contruction'], errors='coerce')
+    if 'year_contruction' in df.columns:
+        df['year_contruction'] = pd.to_numeric(df['year_contruction'], errors='coerce')
+    else:
+        df['year_contruction'] = 1990
+
     
     # 2. COST_SCORE (40%) - Precio por m² normalizado
     print("💰 Calculando cost_score...")
@@ -112,14 +96,24 @@ def calculate_scores(df):
         df.loc[valid_data.index, 'cost_score'] = valid_data['cost_score']
     
     # Rellenar NaN con valor promedio (5)
-    df['cost_score'] = df['cost_score'].fillna(5)
-    
-    # 3. SAFETY_SCORE (40%) - Basado en ubicación
-    print("🏙️ Calculando safety_score...")
-    
     # Extraer ciudad de location (para filtrar solo Lima)
-    df['city'] = df['location'].apply(lambda x: str(x).split(',')[-2].strip() if pd.notna(x) else '')
-    df['district'] = df['location'].apply(lambda x: str(x).split(',')[-3].strip() if pd.notna(x) and len(str(x).split(',')) >= 3 else '')
+    # 3. SAFETY_SCORE (40%) - Basado en ubicación
+     # 3. SAFETY_SCORE (40%) - Basado en ubicación
+    print("🏙️ Calculando safety_score...")
+
+    def extract_city_district(location):
+       if pd.isna(location):
+         return '', ''
+       parts = [p.strip() for p in str(location).split(',')]
+       if len(parts) >= 2:
+         return parts[-1], parts[-2]
+       return '', ''
+
+    df[['city', 'district']] = df['location'].apply(
+       lambda x: pd.Series(extract_city_district(x))
+    )
+
+
     
     # Mapa de seguridad por distrito de Lima (AJUSTA SEGÚN TU CONOCIMIENTO)
     safety_by_district = {
@@ -190,6 +184,14 @@ def main():
         os.makedirs(os.path.dirname(output_path), exist_ok=True)
         df_scored.to_csv(output_path, index=False, encoding='utf-8-sig')
         
+        web_output = 'web/data/properties.json'
+        os.makedirs(os.path.dirname(web_output), exist_ok=True)
+        df_scored.to_json(
+            web_output,
+            orient='records',
+            force_ascii=False
+        )
+        print(f"🌐 JSON creado para frontend en: {web_output}")
         print(f"✅ Scores calculados para {len(df_scored)} propiedades")
         print(f"📁 Resultados guardados en: {output_path}")
         
@@ -219,3 +221,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
