@@ -14,6 +14,9 @@ Si bien existen distritos consolidados con excelente calidad de vida, sus costos
 ### 💡 Nuestra Propuesta de Valor
 Este proyecto busca **redescubrir la ciudad**. A través del análisis de datos, identificamos zonas que ofrecen un **equilibrio óptimo entre costo y beneficio**.
 
+### ¿En qué nos diferenciamos?
+Mientras otros agentes inmobiliarios te dicen 'esta zona es tranquila' basándose en su percepción, nosotros cruzamos datos reales de seguridad y tráfico en tiempo real. No vendemos promesas, vendemos certeza estadística.
+
 ### 🎯 Nuestros objeivos
 * Encontrar el mejor distrito para vivir comparando el precio de alquiler con la calidad de vida.
 * Integrar una plataforma que sea fácil de utilizar al identificar lugares de interés para cada usuario.
