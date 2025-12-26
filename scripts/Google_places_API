@@ -50,4 +50,19 @@
    "outputs": [],
    "source": [
     "import googlemaps\n",
+    "# ---------------------------------------------------------\n",
+    "# PARTE 1: CONFIGURACIÓN\n",
+    "# ---------------------------------------------------------\n",
+    "# Colocamos nuestra API key\n",
+    "API_KEY = 'AIzaSyA9yU8036YYM6pXyYOPAHEsV-AUJKT2YYU'\n",
+    "gmaps = googlemaps.Client(key=API_KEY)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 55,
+   "id": "ab5e9ae5-9cc0-44e4-bedd-db42a5bc0e96",
+   "metadata": {},
+   "outputs": [],
+   "source": [
 
