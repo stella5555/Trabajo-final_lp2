@@ -1,0 +1,41 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "id": "77f6d88e-13b3-4ad4-a00b-a6b83629da14",
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Collecting googlemaps\n",
+      "  Downloading googlemaps-4.10.0.tar.gz (33 kB)\n",
+      "  Preparing metadata (setup.py): started\n",
+      "  Preparing metadata (setup.py): finished with status 'done'\n",
+      "Requirement already satisfied: requests<3.0,>=2.20.0 in c:\\users\\mafer\\anaconda3\\lib\\site-packages (from googlemaps) (2.32.3)\n",
+      "Requirement already satisfied: charset-normalizer<4,>=2 in c:\\users\\mafer\\anaconda3\\lib\\site-packages (from requests<3.0,>=2.20.0->googlemaps) (3.3.2)\n",
+      "Requirement already satisfied: idna<4,>=2.5 in c:\\users\\mafer\\anaconda3\\lib\\site-packages (from requests<3.0,>=2.20.0->googlemaps) (3.7)\n",
+      "Requirement already satisfied: urllib3<3,>=1.21.1 in c:\\users\\mafer\\anaconda3\\lib\\site-packages (from requests<3.0,>=2.20.0->googlemaps) (2.3.0)\n",
+      "Requirement already satisfied: certifi>=2017.4.17 in c:\\users\\mafer\\anaconda3\\lib\\site-packages (from requests<3.0,>=2.20.0->googlemaps) (2025.4.26)\n",
+      "Building wheels for collected packages: googlemaps\n",
+      "  Building wheel for googlemaps (setup.py): started\n",
+      "  Building wheel for googlemaps (setup.py): finished with status 'done'\n",
+      "  Created wheel for googlemaps: filename=googlemaps-4.10.0-py3-none-any.whl size=40749 sha256=15dda8398b4560a69595c753d20310442c428f43fcd6541ff483bd44d9c21d9b\n",
+      "  Stored in directory: c:\\users\\mafer\\appdata\\local\\pip\\cache\\wheels\\76\\2a\\24\\5993a7b77c9a37b86f415096436a448c1babdd132066bdcb31\n",
+      "Successfully built googlemaps\n",
+      "Installing collected packages: googlemaps\n",
+      "Successfully installed googlemaps-4.10.0\n",
+      "Note: you may need to restart the kernel to use updated packages.\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "  DEPRECATION: Building 'googlemaps' using the legacy setup.py bdist_wheel mechanism, which will be removed in a future version. pip 25.3 will enforce this behaviour change. A possible replacement is to use the standardized build interface by setting the `--use-pep517` option, (possibly combined with `--no-build-isolation`), or adding a `pyproject.toml` file to the source tree of 'googlemaps'. Discussion can be found at https://github.com/pypa/pip/issues/6334\n"
+     ]
+    }
+   ],
+
