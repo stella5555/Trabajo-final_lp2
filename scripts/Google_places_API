@@ -38,4 +38,16 @@
      ]
     }
    ],
+   "source": [
+    "pip install googlemaps"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "62ccca6d-a9ce-4e12-9c78-a97ac23d2b9c",
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import googlemaps\n",
 
