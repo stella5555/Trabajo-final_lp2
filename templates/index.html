@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exposición Final LP2</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
+        
+        /* ESTILO GENERAL DE SECCIONES */
+        section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        /* 1. PORTADA */
+        #portada { background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); color: white; text-align: center; }
+        
+        /* 2. TEORÍA */
+        #teoria { background-color: #ffffff; }
+        .feature-box { padding: 30px; border-radius: 15px; transition: transform 0.3s; height: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
+        .feature-box:hover { transform: translateY(-10px); background: #f8f9fa; }
+        
+        /* 3. VISOR DE CÓDIGO (Estilo VS Code) */
+        #codigo { background-color: #1e1e1e; color: #d4d4d4; }
+        .vscode-window {
+            background-color: #252526;
+            width: 100%;
+            max-width: 950px; /* Un poco más ancho para que quepa el código nuevo */
+            border-radius: 8px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            overflow: hidden;
+            font-family: 'Fira Code', monospace;
+            text-align: left;
+        }
+        .vscode-header {
+            background-color: #333333;
+            padding: 10px 15px;
+            display: flex;
+            gap: 10px;
+            border-bottom: 1px solid #1e1e1e;
+        }
+        .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; }
+        .red { background-color: #ff5f56; } .yellow { background-color: #ffbd2e; } .green { background-color: #27c93f; }
+        
+        .nav-tabs .nav-link { color: #aaaaaa; border: none; background: transparent; font-size: 0.9rem; }
+        .nav-tabs .nav-link.active { color: #ffffff; background-color: #1e1e1e; border-top: 2px solid #007acc; }
+        
+        .code-content { padding: 20px; color: #9cdcfe; font-size: 0.85rem; line-height: 1.6; max-height: 500px; overflow-y: auto; }
+        
+        /* Colores de Sintaxis Python */
+        .kwd { color: #569cd6; } /* def, return, if, else, import */
+        .str { color: #ce9178; } /* Strings 'text' */
+        .num { color: #b5cea8; } /* Números */
+        .com { color: #6a9955; } /* Comentarios */
+        .func { color: #dcdcaa; } /* Nombres de funciones */
+        .cls { color: #4ec9b0; } /* Clases */
+
+        /* 4. DEMO */
+        #demo { background-color: #f0f2f5; }
+        .score-circle { width: 100px; height: 100px; background: #2c3e50; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">🎓 Proyecto Final LP2</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="#portada">Inicio</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#teoria">Lógica</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#codigo">Código Fuente</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#demo">🔴 Ejecutar</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section id="portada">
+        <div>
+            <h1>LIMA HOUSING ANALYTICS</h1>
+            <p class="lead">Integración de APIs y Open Data para la valoración de inmuebles</p>
+            <hr class="my-4" style="width: 50%; margin: auto; border-color: rgba(255,255,255,0.3);">
+            <p>María Fernanda Chávez Mendoza | 20240703</p>
+            <p>Hilary Penelope Cruz Cruz | Lenguaje de programación 2</p>
+            <a href="#teoria" class="btn btn-outline-light mt-3 rounded-pill">Comenzar Exposición 👇</a>
+        </div>
+    </section>
+
+    <section id="teoria">
+        <div class="container text-center">
+            <h2 class="mb-5 text-dark fw-bold">Nuestra Fórmula de Valoración</h2>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="display-4 mb-3">🛡️</div>
+                        <h4>40% Seguridad</h4>
+                        <p class="text-muted small">Algoritmo híbrido: Cruza datos históricos del <b>INEI (80%)</b> con la presencia de Comisarías detectadas por <b>API (20%)</b>.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="display-4 mb-3">💰</div>
+                        <h4>40% Precio</h4>
+                        <p class="text-muted small">Evaluación de costo-beneficio. Se asigna mayor puntaje a propiedades con menor precio por m² en zonas de alta demanda.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="feature-box">
+                        <div class="display-4 mb-3">🎡</div>
+                        <h4>20% Servicios</h4>
+                        <p class="text-muted small">Escaneo geoespacial (500m) contando <b>Parques</b>, <b>Transporte</b> y <b>Restaurantes</b> para medir habitabilidad.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="codigo">
+        <div class="container">
+            <h2 class="text-center text-white mb-4">💻 Arquitectura del Código</h2>
+            
+            <div class="vscode-window mx-auto">
+                <div class="vscode-header">
+                    <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                    <span class="ms-3 text-muted small">Visual Studio Code - Proyecto LP2</span>
+                </div>
+                
+                <ul class="nav nav-tabs px-2 pt-2" id="codeTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="google-tab" data-bs-toggle="tab" data-bs-target="#google" type="button">🐍 Api google places.py</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="logic-tab" data-bs-toggle="tab" data-bs-target="#logic" type="button">📄 mis_modulos.py</button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="app-tab" data-bs-toggle="tab" data-bs-target="#app" type="button">⚙️ app.py</button>
+                    </li>
+                </ul>
+
+                <div class="tab-content" id="codeTabContent">
+                    
+                    <div class="tab-pane fade show active" id="google" role="tabpanel">
+                        <div class="code-content">
+                            <pre>
+<span class="kwd">import</span> googlemaps
+
+<span class="com"># ---------------------------------------------------------</span>
+<span class="com"># PARTE 1: CONFIGURACIÓN</span>
+<span class="com"># ---------------------------------------------------------</span>
+API_KEY = <span class="str">'AIzaSyA9yU8036YYM6pXyYOPAHEsV-AUJKT2YYU'</span>
+gmaps = googlemaps.Client(key=API_KEY)
+
+<span class="com"># ---------------------------------------------------------</span>
+<span class="com"># PARTE 2: LAS FUNCIONES </span>
+<span class="com"># ---------------------------------------------------------</span>
+
+<span class="kwd">def</span> <span class="func">obtener_coordenadas_de_nombre</span>(nombre_lugar):
+    <span class="str">""" Convierte un nombre (ej. 'Plaza de Armas') en coordenadas. """</span>
+    <span class="func">print</span>(<span class="str">f"🔎 Buscando coordenadas para: '{nombre_lugar}'..."</span>)
+    respuesta = gmaps.geocode(nombre_lugar)
+    
+    <span class="kwd">if</span> respuesta:
+        ubicacion = respuesta[<span class="num">0</span>][<span class="str">'geometry'</span>][<span class="str">'location'</span>]
+        direccion = respuesta[<span class="num">0</span>][<span class="str">'formatted_address'</span>]
+        <span class="func">print</span>(<span class="str">f"📍 Dirección encontrada: {direccion}"</span>)
+        <span class="kwd">return</span> ubicacion[<span class="str">'lat'</span>], ubicacion[<span class="str">'lng'</span>]
+    <span class="kwd">else</span>:
+        <span class="func">print</span>(<span class="str">"❌ No se encontró el lugar."</span>)
+        <span class="kwd">return</span> <span class="kwd">None</span>, <span class="kwd">None</span>
+
+<span class="kwd">def</span> <span class="func">calcular_nota_servicios</span>(parques, transporte, restaurantes):
+    <span class="com"># 1. TRANSPORTE (Max 4 puntos)</span>
+    <span class="kwd">if</span> transporte >= <span class="num">8</span>:
+        nota_transporte = <span class="num">4.0</span>
+    <span class="kwd">else</span>:
+        nota_transporte = transporte * <span class="num">0.5</span> 
+
+    <span class="com"># 2. PARQUES (Max 3 puntos)</span>
+    <span class="kwd">if</span> parques > <span class="num">3</span>: 
+        nota_parques = <span class="num">3.0</span>
+    <span class="kwd">else</span>:
+        nota_parques = parques * <span class="num">0.75</span> 
+        
+    <span class="com"># 3. RESTAURANTES (Max 3 puntos)</span>
+    <span class="kwd">if</span> restaurantes >= <span class="num">5</span>:
+        nota_restaurantes = <span class="num">3.0</span>
+    <span class="kwd">else</span>:
+        nota_restaurantes = restaurantes * <span class="num">0.6</span>
+
+    <span class="kwd">return</span> nota_transporte + nota_parques + nota_restaurantes
+
+<span class="kwd">def</span> <span class="func">calcular_nota_seguridad</span>(policia):
+    <span class="com"># 1. COMISARÍA (Max 3 puntos)</span>
+    <span class="kwd">if</span> policia >= <span class="num">1</span>:
+        <span class="kwd">return</span> <span class="num">10.0</span>
+    <span class="kwd">else</span>:
+        <span class="kwd">return</span> <span class="num">0.0</span>
+
+<span class="kwd">def</span> <span class="func">analizar_zona_google</span>(lat, lon):
+    <span class="func">print</span>(<span class="str">"📊 Analizando el entorno (500m a la redonda)..."</span>)
+    
+    <span class="com"># --- A. OBTENCIÓN DE DATOS (API) ---</span>
+    res_restaurantes = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'restaurant'</span>)
+    num_restaurantes = <span class="func">len</span>(res_restaurantes.get(<span class="str">'results'</span>, []))
+
+    res_parques = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'park'</span>)
+    num_parques = <span class="func">len</span>(res_parques.get(<span class="str">'results'</span>, []))
+    
+    res_policia = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">1000</span>, type=<span class="str">'police'</span>)
+    num_policia = <span class="func">len</span>(res_policia.get(<span class="str">'results'</span>, []))
+
+    res_transporte = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'transit_station'</span>)
+    num_transporte = <span class="func">len</span>(res_transporte.get(<span class="str">'results'</span>, []))
+
+    <span class="com"># --- B. CÁLCULO DE NOTA  ---</span>
+    puntaje_calculado = (<span class="func">calcular_nota_servicios</span>(num_parques, num_transporte, num_restaurantes)*<span class="num">0.2</span>)
+    puntaje_policia = (<span class="func">calcular_nota_seguridad</span>(num_policia)*<span class="num">0.08</span>)
+
+    <span class="com"># --- C. RESULTADO FINAL ---</span>
+    <span class="kwd">return</span> {
+        <span class="str">"cantidades"</span>: {
+            <span class="str">"restaurantes"</span>: num_restaurantes,
+            <span class="str">"parques"</span>: num_parques,
+            <span class="str">"policia"</span>: num_policia,
+            <span class="str">"transporte"</span>: num_transporte
+        },
+        <span class="str">"puntaje_total"</span>: <span class="func">round</span>(puntaje_calculado, <span class="num">2</span>),
+        <span class="str">"puntaje_total_policia"</span>: <span class="func">round</span>(puntaje_policia, <span class="num">2</span>)
+    }
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="logic" role="tabpanel">
+                        <div class="code-content">
+                            <pre>
+<span class="com"># Lógica de ejemplo para la presentación</span>
+<span class="kwd">def</span> <span class="func">ejemplo_modulos</span>():
+    <span class="kwd">return</span> <span class="str">"Aquí va el resto de tu lógica..."</span>
+                            </pre>
+                        </div>
+                    </div>
+
+                    <div class="tab-pane fade" id="app" role="tabpanel">
+                        <div class="code-content">
+                            <pre>
+<span class="com"># FÓRMULA FINAL DEL PROYECTO (Weighting Algorithm)</span>
+<span class="kwd">def</span> <span class="func">calcular_indice_final</span>(seguridad, precio, servicios):
+    
+    <span class="com"># Definición de Pesos (Weights)</span>
+    W_SEGURIDAD = <span class="num">0.40</span>  <span class="com"># Prioridad Alta</span>
+    W_PRECIO    = <span class="num">0.40</span>  <span class="com"># Prioridad Alta</span>
+    W_SERVICIOS = <span class="num">0.20</span>  <span class="com"># Prioridad Media</span>
+
+    <span class="com"># Cálculo del Índice de Calidad de Vida (0 - 10)</span>
+    indice = (seguridad * W_SEGURIDAD) + \
+             (precio * W_PRECIO) + \
+             (servicios * W_SERVICIOS)
+             
+    <span class="kwd">return</span> <span class="func">round</span>(indice, <span class="num">2</span>)
+                            </pre>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <p class="text-center text-muted mt-3 small">Módulo principal de integración con Google Maps API.</p>
+        </div>
+    </section>
+
+    <section id="demo">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card p-4 shadow-sm border-0">
+                        <h3 class="text-center mb-4">🏡 Demo en Vivo</h3>
+                        
+                        <form action="/" method="POST">
+                            <div class="mb-3">
+                                <label class="fw-bold">📍 Dirección:</label>
+                                <input type="text" name="lugar" class="form-control" placeholder="Ej: Real Plaza Puruchuco" required>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold">🗺️ Distrito:</label>
+                                <select name="distrito" class="form-select">
+                                    <option value="ATE">Ate</option>
+                                    <option value="LA MOLINA">La Molina</option>
+                                    <option value="SAN BORJA">San Borja</option>
+                                    <option value="MIRAFLORES">Miraflores</option>
+                                    <option value="SAN ISIDRO">San Isidro</option>
+                                    <option value="SAN JUAN DE LURIGANCHO">S.J.L.</option>
+                                    <option value="LIMA">Cercado de Lima</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label class="fw-bold">💰 Precio ($/m²):</label>
+                                <input type="number" name="precio" class="form-control" placeholder="Ej: 1200" required>
+                            </div>
+                            <button type="submit" class="btn btn-dark w-100 py-2">⚡ Ejecutar Análisis</button>
+                        </form>
+
+                        {% if puntaje_final %}
+                        <hr class="my-4">
+                        <div class="text-center">
+                            <h4 class="mb-3">Resultado</h4>
+                            <div class="score-circle mb-3 shadow">{{ puntaje_final }}</div>
+                            <div class="d-flex justify-content-between px-3">
+                                <small>🛡️ Seg: <b>{{ notas.seguridad }}</b></small>
+                                <small>💰 Pre: <b>{{ notas.precio }}</b></small>
+                                <small>🎡 Ser: <b>{{ notas.servicios }}</b></small>
+                            </div>
+                            <div class="alert alert-secondary mt-3 py-1 small">
+                                🔎 Se encontraron <b>{{ detalles.policia }}</b> comisarías cerca.
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
