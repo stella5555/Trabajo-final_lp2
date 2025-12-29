@@ -45,13 +45,20 @@ def home():
     detalles_api = None
 
     if request.method == 'POST':
-        # 1. Recibir datos del HTML
+        # 1. Recibimos los datos del formulario
         lugar = request.form['lugar']
-        distrito = request.form['distrito']
-        try:
-            precio = float(request.form['precio'])
-        except ValueError:
-            precio = 0.0
+        precio = float(request.form['precio'])
+
+        # 2. LOGICA INTELIGENTE PARA EL DISTRITO
+        # Ejemplo: "Real Plaza, Ate" 
+        if "," in lugar:
+            # Toma la última parte y la convierte a mayúsculas (ej: " Ate" -> "ATE")
+            distrito = lugar.split(',')[-1].strip().upper()
+        else:
+            # Si no puso coma, asumimos que todo el texto es el distrito o ponemos uno por defecto
+            distrito = "LIMA" 
+        
+        print(f"📍 Distrito detectado: {distrito}") # Para que lo veas en la terminal
 
         # 2. Llamar a TU módulo (Google Maps)
         lat, lon = mis_modulos.obtener_coordenadas_de_nombre(lugar)

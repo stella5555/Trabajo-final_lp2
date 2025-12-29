@@ -102,7 +102,7 @@
                     <div class="feature-box">
                         <div class="display-4 mb-3">🛡️</div>
                         <h4>40% Seguridad</h4>
-                        <p class="text-muted small">Algoritmo híbrido: Cruza datos históricos del <b>INEI (80%)</b> con la presencia de Comisarías detectadas por <b>API (20%)</b>.</p>
+                        <p class="text-muted small">Database de datos de inseguridad</b>en los distritos de Lima Metropolitana. </b>.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -285,27 +285,21 @@ gmaps = googlemaps.Client(key=API_KEY)
                         
                         <form action="/" method="POST">
                             <div class="mb-3">
-                                <label class="fw-bold">📍 Dirección:</label>
-                                <input type="text" name="lugar" class="form-control" placeholder="Ej: Real Plaza Puruchuco" required>
+                                <label class="fw-bold">📍 Ubicación / Zona:</label>
+                                <input type="text" name="lugar" class="form-control form-control-lg" placeholder="Ej: Ceres, Ate" required>
+                                <div class="form-text text-muted">La API detectará las coordenadas y el distrito automáticamente.</div>
                             </div>
-                            <div class="mb-3">
-                                <label class="fw-bold">🗺️ Distrito:</label>
-                                <select name="distrito" class="form-select">
-                                    <option value="ATE">Ate</option>
-                                    <option value="LA MOLINA">La Molina</option>
-                                    <option value="SAN BORJA">San Borja</option>
-                                    <option value="MIRAFLORES">Miraflores</option>
-                                    <option value="SAN ISIDRO">San Isidro</option>
-                                    <option value="SAN JUAN DE LURIGANCHO">S.J.L.</option>
-                                    <option value="LIMA">Cercado de Lima</option>
-                                </select>
-                            </div>
+
                             <div class="mb-3">
                                 <label class="fw-bold">💰 Precio ($/m²):</label>
-                                <input type="number" name="precio" class="form-control" placeholder="Ej: 1200" required>
+                                <div class="input-group">
+                                    <span class="input-group-text">$</span>
+                                    <input type="number" name="precio" class="form-control" placeholder="Ej: 1500" min="0" required>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-dark w-100 py-2">⚡ Ejecutar Análisis</button>
-                        </form>
+
+                            <button type="submit" class="btn btn-dark w-100 py-3 fw-bold">⚡ Buscar y Analizar</button>
+                    </form>
 
                         {% if puntaje_final %}
                         <hr class="my-4">
