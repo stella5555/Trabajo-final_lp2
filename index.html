@@ -32,7 +32,7 @@
         .vscode-window {
             background-color: #252526;
             width: 100%;
-            max-width: 950px; /* Un poco más ancho para que quepa el código nuevo */
+            max-width: 950px;
             border-radius: 8px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.5);
             overflow: hidden;
@@ -54,15 +54,15 @@
         
         .code-content { padding: 20px; color: #9cdcfe; font-size: 0.85rem; line-height: 1.6; max-height: 500px; overflow-y: auto; }
         
-        /* Colores de Sintaxis Python */
-        .kwd { color: #569cd6; } /* def, return, if, else, import */
+        /* Colores de Sintaxis Python simulada */
+        .kwd { color: #569cd6; } /* def, return, if, else, import, from */
         .str { color: #ce9178; } /* Strings 'text' */
         .num { color: #b5cea8; } /* Números */
         .com { color: #6a9955; } /* Comentarios */
         .func { color: #dcdcaa; } /* Nombres de funciones */
         .cls { color: #4ec9b0; } /* Clases */
 
-        /* 4. DEMO */
+        /* 4. DEMO (Ejecución Visual) */
         #demo { background-color: #f0f2f5; }
         .score-circle { width: 100px; height: 100px; background: #2c3e50; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; margin: 0 auto; }
     </style>
@@ -102,14 +102,14 @@
                     <div class="feature-box">
                         <div class="display-4 mb-3">🛡️</div>
                         <h4>40% Seguridad</h4>
-                        <p class="text-muted small">Exploramos en la API las comisarías</b> cercanas (1km) en los distritos de Lima Metropolitana</b>.</p>
+                        <p class="text-muted small">Exploramos en la API las comisarías cercanas (1km) en los distritos de Lima Metropolitana.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
                     <div class="feature-box">
                         <div class="display-4 mb-3">💰</div>
                         <h4>40% Precio</h4>
-                        <p class="text-muted small">Evaluación de costo-beneficio. Se asigna mayor puntaje a propiedades con menor precio por m² en zonas de alta demanda.</p>
+                        <p class="text-muted small">Evaluación de costo-beneficio. Se asigna mayor puntaje a propiedades con menor precio por m² comparado con el mercado real (Urbania).</p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -138,10 +138,10 @@
                         <button class="nav-link active" id="google-tab" data-bs-toggle="tab" data-bs-target="#google" type="button">🐍 Google_places_api.py</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="logic-tab" data-bs-toggle="tab" data-bs-target="#logic" type="button">📄 urbania_dataset.py</button>
+                        <button class="nav-link" id="logic-tab" data-bs-toggle="tab" data-bs-target="#logic" type="button">📄 data_processor.py</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="app-tab" data-bs-toggle="tab" data-bs-target="#app" type="button">⚙️ app.py</button>
+                        <button class="nav-link" id="app-tab" data-bs-toggle="tab" data-bs-target="#app" type="button">⚙️ process_security.py</button>
                     </li>
                 </ul>
 
@@ -152,57 +152,9 @@
                             <pre>
 <span class="kwd">import</span> googlemaps
 
-<span class="com"># ---------------------------------------------------------</span>
-<span class="com"># PARTE 1: CONFIGURACIÓN</span>
-<span class="com"># ---------------------------------------------------------</span>
+<span class="com"># CONFIGURACIÓN API</span>
 API_KEY = <span class="str">'AIzaSyA9yU8036YYM6pXyYOPAHEsV-AUJKT2YYU'</span>
 gmaps = googlemaps.Client(key=API_KEY)
-
-<span class="com"># ---------------------------------------------------------</span>
-<span class="com"># PARTE 2: LAS FUNCIONES </span>
-<span class="com"># ---------------------------------------------------------</span>
-
-<span class="kwd">def</span> <span class="func">obtener_coordenadas_de_nombre</span>(nombre_lugar):
-    <span class="str">""" Convierte un nombre (ej. 'Plaza de Armas') en coordenadas. """</span>
-    <span class="func">print</span>(<span class="str">f"🔎 Buscando coordenadas para: '{nombre_lugar}'..."</span>)
-    respuesta = gmaps.geocode(nombre_lugar)
-    
-    <span class="kwd">if</span> respuesta:
-        ubicacion = respuesta[<span class="num">0</span>][<span class="str">'geometry'</span>][<span class="str">'location'</span>]
-        direccion = respuesta[<span class="num">0</span>][<span class="str">'formatted_address'</span>]
-        <span class="func">print</span>(<span class="str">f"📍 Dirección encontrada: {direccion}"</span>)
-        <span class="kwd">return</span> ubicacion[<span class="str">'lat'</span>], ubicacion[<span class="str">'lng'</span>]
-    <span class="kwd">else</span>:
-        <span class="func">print</span>(<span class="str">"❌ No se encontró el lugar."</span>)
-        <span class="kwd">return</span> <span class="kwd">None</span>, <span class="kwd">None</span>
-
-<span class="kwd">def</span> <span class="func">calcular_nota_servicios</span>(parques, transporte, restaurantes):
-    <span class="com"># 1. TRANSPORTE (Max 4 puntos)</span>
-    <span class="kwd">if</span> transporte >= <span class="num">8</span>:
-        nota_transporte = <span class="num">4.0</span>
-    <span class="kwd">else</span>:
-        nota_transporte = transporte * <span class="num">0.5</span> 
-
-    <span class="com"># 2. PARQUES (Max 3 puntos)</span>
-    <span class="kwd">if</span> parques > <span class="num">3</span>: 
-        nota_parques = <span class="num">3.0</span>
-    <span class="kwd">else</span>:
-        nota_parques = parques * <span class="num">0.75</span> 
-        
-    <span class="com"># 3. RESTAURANTES (Max 3 puntos)</span>
-    <span class="kwd">if</span> restaurantes >= <span class="num">5</span>:
-        nota_restaurantes = <span class="num">3.0</span>
-    <span class="kwd">else</span>:
-        nota_restaurantes = restaurantes * <span class="num">0.6</span>
-
-    <span class="kwd">return</span> nota_transporte + nota_parques + nota_restaurantes
-
-<span class="kwd">def</span> <span class="func">calcular_nota_seguridad</span>(policia):
-    <span class="com"># 1. COMISARÍA (Max 3 puntos)</span>
-    <span class="kwd">if</span> policia >= <span class="num">1</span>:
-        <span class="kwd">return</span> <span class="num">10.0</span>
-    <span class="kwd">else</span>:
-        <span class="kwd">return</span> <span class="num">0.0</span>
 
 <span class="kwd">def</span> <span class="func">analizar_zona_google</span>(lat, lon):
     <span class="func">print</span>(<span class="str">"📊 Analizando el entorno (500m a la redonda)..."</span>)
@@ -214,17 +166,17 @@ gmaps = googlemaps.Client(key=API_KEY)
     res_parques = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'park'</span>)
     num_parques = <span class="func">len</span>(res_parques.get(<span class="str">'results'</span>, []))
     
+    <span class="com"># Radio ampliado para seguridad (1km)</span>
     res_policia = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">1000</span>, type=<span class="str">'police'</span>)
     num_policia = <span class="func">len</span>(res_policia.get(<span class="str">'results'</span>, []))
 
     res_transporte = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'transit_station'</span>)
     num_transporte = <span class="func">len</span>(res_transporte.get(<span class="str">'results'</span>, []))
 
-    <span class="com"># --- B. CÁLCULO DE NOTA  ---</span>
+    <span class="com"># --- B. CÁLCULO DE NOTA ---</span>
     puntaje_calculado = (<span class="func">calcular_nota_servicios</span>(num_parques, num_transporte, num_restaurantes)*<span class="num">0.2</span>)
     puntaje_policia = (<span class="func">calcular_nota_seguridad</span>(num_policia)*<span class="num">0.08</span>)
 
-    <span class="com"># --- C. RESULTADO FINAL ---</span>
     <span class="kwd">return</span> {
         <span class="str">"cantidades"</span>: {
             <span class="str">"restaurantes"</span>: num_restaurantes,
@@ -242,52 +194,76 @@ gmaps = googlemaps.Client(key=API_KEY)
                     <div class="tab-pane fade" id="logic" role="tabpanel">
                         <div class="code-content">
                             <pre>
-<span class="com"># Lógica de ejemplo para la presentación</span>
-<span class="kwd">def</span> <span class="func">ejemplo_modulos</span>():
-    <span class="kwd">return</span> <span class="str">"Aquí va el resto de tu lógica..."</span>
+<span class="kwd">import</span> pandas <span class="kwd">as</span> pd
+
+<span class="com"># Cargamos el dataset histórico de precios</span>
+df = pd.read_csv(<span class="str">'dataset_final.csv'</span>)
+
+<span class="kwd">def</span> <span class="func">evaluar_precio_mercado</span>(distrito, precio_usuario, habitaciones):
+    <span class="str">""" Compara el precio ingresado con el promedio de mercado """</span>
+    
+    <span class="com"># 1. Filtramos por distrito y número de habitaciones</span>
+    filtro = (df[<span class="str">'district'</span>] == distrito) & (df[<span class="str">'bedrooms'</span>] == habitaciones)
+    data_comparable = df[filtro]
+
+    <span class="kwd">if</span> data_comparable.empty:
+        <span class="kwd">return</span> <span class="num">5.0</span> <span class="com"># Nota neutra si no hay data</span>
+
+    <span class="com"># 2. Obtenemos el precio promedio real</span>
+    precio_mercado = data_comparable[<span class="str">'price_per_m2'</span>].mean()
+
+    <span class="com"># 3. Calculamos diferencia porcentual</span>
+    diferencia = (precio_usuario - precio_mercado) / precio_mercado
+
+    <span class="com"># 4. Asignamos nota (Más barato = Mejor nota)</span>
+    <span class="kwd">if</span> diferencia <= -<span class="num">0.30</span>: <span class="kwd">return</span> <span class="num">10.0</span> <span class="com"># Ofertón</span>
+    <span class="kwd">elif</span> diferencia >= <span class="num">0.30</span>: <span class="kwd">return</span> <span class="num">0.0</span> <span class="com"># Muy caro</span>
+    <span class="kwd">else</span>:
+        nota = <span class="num">5</span> - (diferencia * <span class="num">10</span>)
+        <span class="kwd">return</span> <span class="func">round</span>(nota, <span class="num">2</span>)
                             </pre>
                         </div>
                     </div>
 
                     <div class="tab-pane fade" id="app" role="tabpanel">
-    <div class="code-content">
-        <pre>
+                        <div class="code-content">
+                            <pre>
 <span class="kwd">from</span> flask <span class="kwd">import</span> Flask, render_template, request
-<span class="kwd">import</span> mis_modulos
+<span class="kwd">import</span> Google_places_api
+<span class="kwd">import</span> data_processor
 
 <span class="cls">app</span> = Flask(__name__)
 
-<span class="com"># RUTA PRINCIPAL</span>
 <span class="cls">@app</span>.route(<span class="str">'/'</span>, methods=[<span class="str">'GET'</span>, <span class="str">'POST'</span>])
 <span class="kwd">def</span> <span class="func">home</span>():
     <span class="kwd">if</span> request.method == <span class="str">'POST'</span>:
         
-        <span class="com"># 1. Recibimos los datos del input "Lugar"</span>
-        lugar = request.form[<span class="str">'lugar'</span>]  <span class="com"># Ej: "Ceres, Ate"</span>
+        <span class="com"># 1. Recibimos Inputs</span>
+        lugar = request.form[<span class="str">'lugar'</span>] 
         precio = <span class="func">float</span>(request.form[<span class="str">'precio'</span>])
+        hab = <span class="func">int</span>(request.form[<span class="str">'hab'</span>])
 
         <span class="com"># 2. Lógica Inteligente: Detectar Distrito</span>
         <span class="kwd">if</span> <span class="str">","</span> <span class="kwd">in</span> lugar:
-            <span class="com"># Separa el texto por la coma y toma la última parte</span>
             distrito = lugar.split(<span class="str">','</span>)[-<span class="num">1</span>].strip().upper()
         <span class="kwd">else</span>:
-            distrito = <span class="str">"LIMA"</span> <span class="com"># Valor por defecto</span>
+            distrito = <span class="str">"LIMA"</span>
 
-        <span class="func">print</span>(<span class="str">f"📍 Distrito detectado: {distrito}"</span>)
+        <span class="com"># 3. Procesamiento de Datos</span>
+        nota_p = data_processor.evaluar_precio_mercado(distrito, precio, hab)
+        coords = Google_places_api.obtener_coordenadas(lugar)
+        analisis = Google_places_api.analizar_zona_google(coords)
 
-        <span class="com"># 3. Ejecutamos el análisis (usando mis_modulos)</span>
-        resultado = mis_modulos.calcular_todo(distrito, precio)
-        
-        <span class="kwd">return</span> render_template(<span class="str">'index.html'</span>, **resultado)
+        <span class="kwd">return</span> render_template(<span class="str">'index.html'</span>, score=nota_p, data=analisis)
 
     <span class="kwd">return</span> render_template(<span class="str">'index.html'</span>)
+                            </pre>
+                        </div>
+                    </div>
 
-<span class="kwd">if</span> __name__ == <span class="str">'__main__'</span>:
-    <span class="cls">app</span>.run(debug=<span class="kwd">True</span>)
-        </pre>
-    </div>
-</div>
-            <p class="text-center text-muted mt-3 small">Módulo principal de integración con Google Maps API.</p>
+                </div>
+            </div>
+            <p class="text-center text-muted mt-3 small">Módulos principales del sistema.</p>
         </div>
     </section>
 
@@ -296,7 +272,7 @@ gmaps = googlemaps.Client(key=API_KEY)
             <div class="row justify-content-center">
                 <div class="col-md-6">
                     <div class="card p-4 shadow-sm border-0">
-                        <h3 class="text-center mb-4">🏡 Demo en Vivo</h3>
+                        <h3 class="text-center mb-4">🏡 Ejecución del Sistema</h3>
                         
                         <form action="/" method="POST">
                             <div class="mb-3">
@@ -329,9 +305,6 @@ gmaps = googlemaps.Client(key=API_KEY)
                                 <small>🛡️ Seg: <b>{{ notas.seguridad }}</b></small>
                                 <small>💰 Pre: <b>{{ notas.precio }}</b></small>
                                 <small>🎡 Ser: <b>{{ notas.servicios }}</b></small>
-                            </div>
-                            <div class="alert alert-secondary mt-3 py-1 small">
-                                🔎 Se encontraron <b>{{ detalles.policia }}</b> comisarías cerca.
                             </div>
                         </div>
                         {% endif %}
