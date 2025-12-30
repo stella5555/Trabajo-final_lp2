@@ -7,8 +7,8 @@ Lima es una ciudad compleja y buscar vivienda no es la excepción, la mayoría d
 
 ### 🚩 El Problema
 Si bien existen distritos consolidados con excelente calidad de vida, sus costos son inalcanzables para gran parte de la población, esto empuja a los ciudadanos a zonas más económicas, sacrificando a menudo acceso a servicios vitales como:
-* 🛡️ Seguridad ciudadana
-* 🍽️ Oferta gastronómica
+* 🛡️ Seguridad ciudadana (Comisarías, delitos)
+* 🍽️ Oferta gastronómica (Restaurantes)
 * 🎭 Esparcimiento y diversión
 
 ### 💡 Nuestra Propuesta de Valor
