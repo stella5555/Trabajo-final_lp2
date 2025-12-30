@@ -79,7 +79,7 @@ def analizar_zona_google(lat, lon):
     # --- B. CÁLCULO DE NOTA  ---
     
     puntaje_calculado = (calcular_nota_servicios(num_parques, num_transporte, num_restaurantes)*0.2)
-    puntaje_policia = (calcular_nota_seguridad(num_policia)*0.4)
+    puntaje_policia = (calcular_nota_seguridad(num_policia)*0.08)
 
     # --- C. RESULTADO FINAL SERVICIOS (20%) ---
     return {
@@ -90,6 +90,37 @@ def analizar_zona_google(lat, lon):
             "transporte": num_transporte
         },
         "puntaje_total": round(puntaje_calculado, 2),
-        # --- C.2 RESULTADO FINAL SEGURIDAD (40%) ---
+        # --- C.2 RESULTADO FINAL COMISARÍA (8%) ---
         "puntaje_total_policia": round(puntaje_policia, 2)
     }
+
+# ---------------------------------------------------------
+# PARTE 3: EJECUCIÓN
+# ---------------------------------------------------------
+
+# 1. Se escribe aquí el lugar que queremos probar
+mi_lugar = "Ceres, Ate" 
+
+# 2. Obtenemos coordenadas
+lat, lon = obtener_coordenadas_de_nombre(mi_lugar)
+
+# 3. Se analizan las coordenadas
+if lat and lon:
+    resultados = analizar_zona_google(lat, lon)
+    
+    print("\n" + "="*60)
+    print(f"   ANÁLISIS DE SERVICIOS (20% del total): {mi_lugar}")
+    print("="*60)
+    print(f"🚌 Transporte:    {resultados['cantidades']['transporte']}")
+    print(f"🌳 Parques:       {resultados['cantidades']['parques']}")
+    print(f"🍽️ Restaurantes:  {resultados['cantidades']['restaurantes']}")
+    print("-" * 60)
+    print(f"⭐ NOTA FINAL:    {resultados['puntaje_total']}")
+    print("="*60)
+
+    print("="*60)
+    print("--- 🛡️ BLOQUE SEGURIDAD ( 8% del total del 40% de SEGURIDAD) ---")
+    print(f"👮 Comisarías:    {resultados['cantidades']['policia']} encontradas (1km)")
+    print("-" * 60)
+    print(f"👉 NOTA INFRAESTRUCTURA POLICIAL: {resultados['puntaje_total_policia']}")
+    print("="*60)
