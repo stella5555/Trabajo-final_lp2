@@ -135,10 +135,10 @@
                 
                 <ul class="nav nav-tabs px-2 pt-2" id="codeTab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active" id="google-tab" data-bs-toggle="tab" data-bs-target="#google" type="button">🐍 Api google places.py</button>
+                        <button class="nav-link active" id="google-tab" data-bs-toggle="tab" data-bs-target="#google" type="button">🐍 Google_places_api.py</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link" id="logic-tab" data-bs-toggle="tab" data-bs-target="#logic" type="button">📄 mis_modulos.py</button>
+                        <button class="nav-link" id="logic-tab" data-bs-toggle="tab" data-bs-target="#logic" type="button">📄 urbania_dataset.py</button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button class="nav-link" id="app-tab" data-bs-toggle="tab" data-bs-target="#app" type="button">⚙️ app.py</button>
@@ -250,28 +250,43 @@ gmaps = googlemaps.Client(key=API_KEY)
                     </div>
 
                     <div class="tab-pane fade" id="app" role="tabpanel">
-                        <div class="code-content">
-                            <pre>
-<span class="com"># FÓRMULA FINAL DEL PROYECTO (Weighting Algorithm)</span>
-<span class="kwd">def</span> <span class="func">calcular_indice_final</span>(seguridad, precio, servicios):
-    
-    <span class="com"># Definición de Pesos (Weights)</span>
-    W_SEGURIDAD = <span class="num">0.40</span>  <span class="com"># Prioridad Alta</span>
-    W_PRECIO    = <span class="num">0.40</span>  <span class="com"># Prioridad Alta</span>
-    W_SERVICIOS = <span class="num">0.20</span>  <span class="com"># Prioridad Media</span>
+    <div class="code-content">
+        <pre>
+<span class="kwd">from</span> flask <span class="kwd">import</span> Flask, render_template, request
+<span class="kwd">import</span> mis_modulos
 
-    <span class="com"># Cálculo del Índice de Calidad de Vida (0 - 10)</span>
-    indice = (seguridad * W_SEGURIDAD) + \
-             (precio * W_PRECIO) + \
-             (servicios * W_SERVICIOS)
-             
-    <span class="kwd">return</span> <span class="func">round</span>(indice, <span class="num">2</span>)
-                            </pre>
-                        </div>
-                    </div>
+<span class="cls">app</span> = Flask(__name__)
 
-                </div>
-            </div>
+<span class="com"># RUTA PRINCIPAL</span>
+<span class="cls">@app</span>.route(<span class="str">'/'</span>, methods=[<span class="str">'GET'</span>, <span class="str">'POST'</span>])
+<span class="kwd">def</span> <span class="func">home</span>():
+    <span class="kwd">if</span> request.method == <span class="str">'POST'</span>:
+        
+        <span class="com"># 1. Recibimos los datos del input "Lugar"</span>
+        lugar = request.form[<span class="str">'lugar'</span>]  <span class="com"># Ej: "Ceres, Ate"</span>
+        precio = <span class="func">float</span>(request.form[<span class="str">'precio'</span>])
+
+        <span class="com"># 2. Lógica Inteligente: Detectar Distrito</span>
+        <span class="kwd">if</span> <span class="str">","</span> <span class="kwd">in</span> lugar:
+            <span class="com"># Separa el texto por la coma y toma la última parte</span>
+            distrito = lugar.split(<span class="str">','</span>)[-<span class="num">1</span>].strip().upper()
+        <span class="kwd">else</span>:
+            distrito = <span class="str">"LIMA"</span> <span class="com"># Valor por defecto</span>
+
+        <span class="func">print</span>(<span class="str">f"📍 Distrito detectado: {distrito}"</span>)
+
+        <span class="com"># 3. Ejecutamos el análisis (usando mis_modulos)</span>
+        resultado = mis_modulos.calcular_todo(distrito, precio)
+        
+        <span class="kwd">return</span> render_template(<span class="str">'index.html'</span>, **resultado)
+
+    <span class="kwd">return</span> render_template(<span class="str">'index.html'</span>)
+
+<span class="kwd">if</span> __name__ == <span class="str">'__main__'</span>:
+    <span class="cls">app</span>.run(debug=<span class="kwd">True</span>)
+        </pre>
+    </div>
+</div>
             <p class="text-center text-muted mt-3 small">Módulo principal de integración con Google Maps API.</p>
         </div>
     </section>
@@ -298,6 +313,10 @@ gmaps = googlemaps.Client(key=API_KEY)
                                 </div>
                             </div>
 
+                            <div class="mb-3">
+                                <label class="fw-bold">🛏️ Habitaciones:</label>
+                                <input type="number" name="hab" class="form-control" placeholder="Ej: 3" min="1" max="10" value="3" required>
+                            </div>
                             <button type="submit" class="btn btn-dark w-100 py-3 fw-bold">⚡ Buscar y Analizar</button>
                     </form>
 

@@ -79,7 +79,7 @@ def analizar_zona_google(lat, lon):
     # --- B. CÁLCULO DE NOTA  ---
     
     puntaje_calculado = (calcular_nota_servicios(num_parques, num_transporte, num_restaurantes)*0.2)
-    puntaje_policia = (calcular_nota_seguridad(num_policia)*0.08)
+    puntaje_policia = (calcular_nota_seguridad(num_policia)*0.4)
 
     # --- C. RESULTADO FINAL SERVICIOS (20%) ---
     return {
@@ -90,6 +90,6 @@ def analizar_zona_google(lat, lon):
             "transporte": num_transporte
         },
         "puntaje_total": round(puntaje_calculado, 2),
-        # --- C.2 RESULTADO FINAL POLICIA (solo un 20% del 40% de la puntuación de SEGURIDAD)
+        # --- C.2 RESULTADO FINAL SEGURIDAD (40%) ---
         "puntaje_total_policia": round(puntaje_policia, 2)
     }

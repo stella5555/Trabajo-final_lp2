@@ -31,7 +31,7 @@ def clean_area(area_str):
 
 def clean_bedroom_bathroom(value):
     """
-    Convierte '2 dormitorios' o '3 baÃ±os' a int
+    Convierte '2 dormitorios' o '3 baños' a int
     """
     if pd.isna(value):
         return 1  # Valor por defecto
