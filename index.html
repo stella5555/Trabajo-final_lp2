@@ -147,25 +147,131 @@
                             <pre>
 <span class="kwd">import</span> googlemaps
 
-<span class="com"># CONFIGURACIÓN API (Ejemplo)</span>
+<span class="com"># ---------------------------------------------------------</span>
+<span class="com"># PARTE 1: CONFIGURACIÓN</span>
+<span class="com"># ---------------------------------------------------------</span>
+<span class="com"># Colocamos nuestra API key</span>
 API_KEY = <span class="str">'AIzaSyA9yU8036YYM6pXyYOPAHEsV-AUJKT2YYU'</span>
 gmaps = googlemaps.Client(key=API_KEY)
 
+<span class="com"># ---------------------------------------------------------</span>
+<span class="com"># PARTE 2: LAS FUNCIONES </span>
+<span class="com"># ---------------------------------------------------------</span>
+
+<span class="kwd">def</span> <span class="func">obtener_coordenadas_de_nombre</span>(nombre_lugar):
+    <span class="str">""" Convierte un nombre (ej. 'Plaza de Armas') en coordenadas. """</span>
+    <span class="func">print</span>(<span class="str">f"🔎 Buscando coordenadas para: '{nombre_lugar}'..."</span>)
+    respuesta = gmaps.geocode(nombre_lugar)
+    
+    <span class="kwd">if</span> respuesta:
+        ubicacion = respuesta[<span class="num">0</span>][<span class="str">'geometry'</span>][<span class="str">'location'</span>]
+        direccion = respuesta[<span class="num">0</span>][<span class="str">'formatted_address'</span>]
+        <span class="func">print</span>(<span class="str">f"📍 Dirección encontrada: {direccion}"</span>)
+        <span class="kwd">return</span> ubicacion[<span class="str">'lat'</span>], ubicacion[<span class="str">'lng'</span>]
+    <span class="kwd">else</span>:
+        <span class="func">print</span>(<span class="str">"❌ No se encontró el lugar."</span>)
+        <span class="kwd">return</span> <span class="kwd">None</span>, <span class="kwd">None</span>
+
+<span class="kwd">def</span> <span class="func">calcular_nota_servicios</span>(parques, transporte, restaurantes):
+
+    <span class="com"># 1. TRANSPORTE (Max 4 puntos) </span>
+    <span class="kwd">if</span> transporte >= <span class="num">8</span>:
+        nota_transporte = <span class="num">4.0</span>
+    <span class="kwd">else</span>:
+        nota_transporte = transporte * <span class="num">0.5</span> 
+
+    <span class="com"># 2. PARQUES (Max 3 puntos) </span>
+    <span class="kwd">if</span> parques > <span class="num">3</span>: 
+        nota_parques = <span class="num">3.0</span>
+    <span class="kwd">else</span>:
+        nota_parques = parques * <span class="num">0.75</span> 
+        
+    <span class="com"># 3. RESTAURANTES (Max 3 puntos) </span>
+    <span class="kwd">if</span> restaurantes >= <span class="num">5</span>:
+        nota_restaurantes = <span class="num">3.0</span>
+    <span class="kwd">else</span>:
+        nota_restaurantes = restaurantes * <span class="num">0.6</span>
+
+    <span class="kwd">return</span> nota_transporte + nota_parques + nota_restaurantes
+
+<span class="com"># Solo la nota de comisaría</span>
+<span class="kwd">def</span> <span class="func">calcular_nota_seguridad</span>(policia):
+ <span class="com"># 1. COMISARÍA (Max 3 puntos)</span>
+    <span class="kwd">if</span> policia >= <span class="num">1</span>:
+        <span class="kwd">return</span> <span class="num">10.0</span>
+    <span class="kwd">else</span>:
+        <span class="kwd">return</span> <span class="num">0.0</span>
+
 <span class="kwd">def</span> <span class="func">analizar_zona_google</span>(lat, lon):
+
     <span class="func">print</span>(<span class="str">"📊 Analizando el entorno (500m a la redonda)..."</span>)
     
     <span class="com"># --- A. OBTENCIÓN DE DATOS (API) ---</span>
+    
+    <span class="com"># 1. Restaurantes</span>
     res_restaurantes = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'restaurant'</span>)
     num_restaurantes = <span class="func">len</span>(res_restaurantes.get(<span class="str">'results'</span>, []))
 
+    <span class="com"># 2. Parques</span>
     res_parques = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'park'</span>)
     num_parques = <span class="func">len</span>(res_parques.get(<span class="str">'results'</span>, []))
     
-    <span class="com"># --- B. RETORNO DE DATOS ---</span>
+    <span class="com"># 3. Policía (Seguridad) - Radio 1km</span>
+    res_policia = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">1000</span>, type=<span class="str">'police'</span>)
+    num_policia = <span class="func">len</span>(res_policia.get(<span class="str">'results'</span>, []))
+
+    <span class="com"># 4. Transporte</span>
+    res_transporte = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'transit_station'</span>)
+    num_transporte = <span class="func">len</span>(res_transporte.get(<span class="str">'results'</span>, []))
+
+    <span class="com"># --- B. CÁLCULO DE NOTA  ---</span>
+    
+    puntaje_calculado = (<span class="func">calcular_nota_servicios</span>(num_parques, num_transporte, num_restaurantes)*<span class="num">0.2</span>)
+    puntaje_policia = (<span class="func">calcular_nota_seguridad</span>(num_policia)*<span class="num">0.08</span>)
+
+    <span class="com"># --- C. RESULTADO FINAL SERVICIOS (20%) ---</span>
     <span class="kwd">return</span> {
-        <span class="str">"restaurantes"</span>: num_restaurantes,
-        <span class="str">"parques"</span>: num_parques
+        <span class="str">"cantidades"</span>: {
+            <span class="str">"restaurantes"</span>: num_restaurantes,
+            <span class="str">"parques"</span>: num_parques,
+            <span class="str">"policia"</span>: num_policia,
+            <span class="str">"transporte"</span>: num_transporte
+        },
+        <span class="str">"puntaje_total"</span>: <span class="func">round</span>(puntaje_calculado, <span class="num">2</span>),
+        <span class="com"># --- C.2 RESULTADO FINAL COMISARÍAS (8%) ---</span>
+        <span class="str">"puntaje_total_policia"</span>: <span class="func">round</span>(puntaje_policia, <span class="num">2</span>)
     }
+
+<span class="com"># ---------------------------------------------------------</span>
+<span class="com"># PARTE 3: EJECUCIÓN</span>
+<span class="com"># ---------------------------------------------------------</span>
+
+<span class="com"># 1. Se escribe aquí el lugar que queremos probar</span>
+mi_lugar = <span class="str">"Ceres, Ate"</span> 
+
+<span class="com"># 2. Obtenemos coordenadas</span>
+lat, lon = <span class="func">obtener_coordenadas_de_nombre</span>(mi_lugar)
+
+<span class="com"># 3. Se analizan las coordenadas</span>
+<span class="kwd">if</span> lat <span class="kwd">and</span> lon:
+    resultados = <span class="func">analizar_zona_google</span>(lat, lon)
+    
+    <span class="func">print</span>(<span class="str">"\n"</span> + <span class="str">"="</span>*<span class="num">60</span>)
+    <span class="func">print</span>(<span class="str">f"   ANÁLISIS DE SERVICIOS (20% del total): {mi_lugar}"</span>)
+    <span class="func">print</span>(<span class="str">"="</span>*<span class="num">60</span>)
+    <span class="func">print</span>(<span class="str">f"🚌 Transporte:    {resultados['cantidades']['transporte']}"</span>)
+    <span class="func">print</span>(<span class="str">f"🌳 Parques:       {resultados['cantidades']['parques']}"</span>)
+    <span class="func">print</span>(<span class="str">f"🍽️ Restaurantes:  {resultados['cantidades']['restaurantes']}"</span>)
+    <span class="func">print</span>(<span class="str">"-"</span> * <span class="num">60</span>)
+    <span class="func">print</span>(<span class="str">f"⭐ NOTA FINAL:    {resultados['puntaje_total']}"</span>)
+    <span class="func">print</span>(<span class="str">"="</span>*<span class="num">60</span>)
+
+    <span class="func">print</span>(<span class="str">"="</span>*<span class="num">60</span>)
+    <span class="func">print</span>(<span class="str">"--- 🛡️ BLOQUE SEGURIDAD ( 8% del total del 40% de SEGURIDAD) ---"</span>)
+    <span class="func">print</span>(<span class="str">f"👮 Comisarías:    {resultados['cantidades']['policia']} encontradas (1km)"</span>)
+    <span class="func">print</span>(<span class="str">"-"</span> * <span class="num">60</span>)
+    <span class="func">print</span>(<span class="str">f"👉 NOTA INFRAESTRUCTURA POLICIAL: {resultados['puntaje_total_policia']}"</span>)
+    <span class="func">print</span>(<span class="str">"="</span>*<span class="num">60</span>)
                             </pre>
                         </div>
                     </div>
