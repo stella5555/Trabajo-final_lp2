@@ -10,7 +10,7 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; scroll-behavior: smooth; }
         
-        /* ESTILO GENERAL DE SECCIONES */
+        /* SECCIONES */
         section {
             min-height: 100vh;
             display: flex;
@@ -27,7 +27,7 @@
         .feature-box { padding: 30px; border-radius: 15px; transition: transform 0.3s; height: 100%; box-shadow: 0 5px 15px rgba(0,0,0,0.05); }
         .feature-box:hover { transform: translateY(-10px); background: #f8f9fa; }
         
-        /* 3. VISOR DE CÓDIGO (Estilo VS Code) */
+        /* 3. VISOR DE CÓDIGO */
         #codigo { background-color: #1e1e1e; color: #d4d4d4; }
         .vscode-window {
             background-color: #252526;
@@ -52,19 +52,15 @@
         .nav-tabs .nav-link { color: #aaaaaa; border: none; background: transparent; font-size: 0.9rem; }
         .nav-tabs .nav-link.active { color: #ffffff; background-color: #1e1e1e; border-top: 2px solid #007acc; }
         
-        .code-content { padding: 20px; color: #9cdcfe; font-size: 0.85rem; line-height: 1.6; max-height: 500px; overflow-y: auto; }
+        .code-content { padding: 20px; color: #9cdcfe; font-size: 0.8rem; line-height: 1.5; max-height: 600px; overflow-y: auto; }
         
-        /* Colores de Sintaxis Python simulada */
-        .kwd { color: #569cd6; } /* def, return, if, else, import, from */
-        .str { color: #ce9178; } /* Strings 'text' */
-        .num { color: #b5cea8; } /* Números */
-        .com { color: #6a9955; } /* Comentarios */
-        .func { color: #dcdcaa; } /* Nombres de funciones */
-        .cls { color: #4ec9b0; } /* Clases */
-
-        /* 4. DEMO (Ejecución Visual) */
-        #demo { background-color: #f0f2f5; }
-        .score-circle { width: 100px; height: 100px; background: #2c3e50; color: white; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; font-weight: bold; margin: 0 auto; }
+        /* Sintaxis Python */
+        .kwd { color: #569cd6; } /* keywords */
+        .str { color: #ce9178; } /* strings */
+        .num { color: #b5cea8; } /* numbers */
+        .com { color: #6a9955; } /* comments */
+        .func { color: #dcdcaa; } /* functions */
+        .cls { color: #4ec9b0; } /* classes */
     </style>
 </head>
 <body>
@@ -76,8 +72,7 @@
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="#portada">Inicio</a></li>
                     <li class="nav-item"><a class="nav-link" href="#teoria">Lógica</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#codigo">Código Fuente</a></li>
-                    <li class="nav-item"><a class="nav-link active" href="#demo">🔴 Ejecutar</a></li>
+                    <li class="nav-item"><a class="nav-link active" href="#codigo">Código Fuente</a></li>
                 </ul>
             </div>
         </div>
@@ -109,7 +104,7 @@
                     <div class="feature-box">
                         <div class="display-4 mb-3">💰</div>
                         <h4>40% Precio</h4>
-                        <p class="text-muted small">Evaluación de costo-beneficio. Se asigna mayor puntaje a propiedades con menor precio por m² comparado con el mercado real (Urbania).</p>
+                        <p class="text-muted small">Evaluación de costo-beneficio. Se asigna mayor puntaje a propiedades con menor precio por m² comparado con el mercado real.</p>
                     </div>
                 </div>
                 <div class="col-md-4">
@@ -152,7 +147,7 @@
                             <pre>
 <span class="kwd">import</span> googlemaps
 
-<span class="com"># CONFIGURACIÓN API</span>
+<span class="com"># CONFIGURACIÓN API (Ejemplo)</span>
 API_KEY = <span class="str">'AIzaSyA9yU8036YYM6pXyYOPAHEsV-AUJKT2YYU'</span>
 gmaps = googlemaps.Client(key=API_KEY)
 
@@ -166,26 +161,10 @@ gmaps = googlemaps.Client(key=API_KEY)
     res_parques = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'park'</span>)
     num_parques = <span class="func">len</span>(res_parques.get(<span class="str">'results'</span>, []))
     
-    <span class="com"># Radio ampliado para seguridad (1km)</span>
-    res_policia = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">1000</span>, type=<span class="str">'police'</span>)
-    num_policia = <span class="func">len</span>(res_policia.get(<span class="str">'results'</span>, []))
-
-    res_transporte = gmaps.places_nearby(location=(lat, lon), radius=<span class="num">500</span>, type=<span class="str">'transit_station'</span>)
-    num_transporte = <span class="func">len</span>(res_transporte.get(<span class="str">'results'</span>, []))
-
-    <span class="com"># --- B. CÁLCULO DE NOTA ---</span>
-    puntaje_calculado = (<span class="func">calcular_nota_servicios</span>(num_parques, num_transporte, num_restaurantes)*<span class="num">0.2</span>)
-    puntaje_policia = (<span class="func">calcular_nota_seguridad</span>(num_policia)*<span class="num">0.08</span>)
-
+    <span class="com"># --- B. RETORNO DE DATOS ---</span>
     <span class="kwd">return</span> {
-        <span class="str">"cantidades"</span>: {
-            <span class="str">"restaurantes"</span>: num_restaurantes,
-            <span class="str">"parques"</span>: num_parques,
-            <span class="str">"policia"</span>: num_policia,
-            <span class="str">"transporte"</span>: num_transporte
-        },
-        <span class="str">"puntaje_total"</span>: <span class="func">round</span>(puntaje_calculado, <span class="num">2</span>),
-        <span class="str">"puntaje_total_policia"</span>: <span class="func">round</span>(puntaje_policia, <span class="num">2</span>)
+        <span class="str">"restaurantes"</span>: num_restaurantes,
+        <span class="str">"parques"</span>: num_parques
     }
                             </pre>
                         </div>
@@ -195,32 +174,241 @@ gmaps = googlemaps.Client(key=API_KEY)
                         <div class="code-content">
                             <pre>
 <span class="kwd">import</span> pandas <span class="kwd">as</span> pd
+<span class="kwd">import</span> os
+<span class="kwd">import</span> re
 
-<span class="com"># Cargamos el dataset histórico de precios</span>
-df = pd.read_csv(<span class="str">'dataset_final.csv'</span>)
-
-<span class="kwd">def</span> <span class="func">evaluar_precio_mercado</span>(distrito, precio_usuario, habitaciones):
-    <span class="str">""" Compara el precio ingresado con el promedio de mercado """</span>
+<span class="kwd">def</span> <span class="func">clean_price</span>(price_str):
+    <span class="str">"""Limpia y convierte precios a soles"""</span>
+    <span class="kwd">if</span> pd.isna(price_str):
+        <span class="kwd">return</span> <span class="kwd">None</span>
     
-    <span class="com"># 1. Filtramos por distrito y número de habitaciones</span>
-    filtro = (df[<span class="str">'district'</span>] == distrito) & (df[<span class="str">'bedrooms'</span>] == habitaciones)
-    data_comparable = df[filtro]
-
-    <span class="kwd">if</span> data_comparable.empty:
-        <span class="kwd">return</span> <span class="num">5.0</span> <span class="com"># Nota neutra si no hay data</span>
-
-    <span class="com"># 2. Obtenemos el precio promedio real</span>
-    precio_mercado = data_comparable[<span class="str">'price_per_m2'</span>].mean()
-
-    <span class="com"># 3. Calculamos diferencia porcentual</span>
-    diferencia = (precio_usuario - precio_mercado) / precio_mercado
-
-    <span class="com"># 4. Asignamos nota (Más barato = Mejor nota)</span>
-    <span class="kwd">if</span> diferencia <= -<span class="num">0.30</span>: <span class="kwd">return</span> <span class="num">10.0</span> <span class="com"># Ofertón</span>
-    <span class="kwd">elif</span> diferencia >= <span class="num">0.30</span>: <span class="kwd">return</span> <span class="num">0.0</span> <span class="com"># Muy caro</span>
+    price_str = <span class="func">str</span>(price_str).upper().strip()
+    
+    <span class="com"># Extraer número (soporta comas como separadores de miles)</span>
+    number_match = re.search(<span class="str">r'[\d,]+\.?\d*'</span>, price_str.replace(<span class="str">','</span>, <span class="str">''</span>))
+    <span class="kwd">if</span> <span class="kwd">not</span> number_match:
+        <span class="kwd">return</span> <span class="kwd">None</span>
+    
+    value = <span class="func">float</span>(number_match.group(<span class="num">0</span>).replace(<span class="str">','</span>, <span class="str">''</span>))
+    
+    <span class="com"># Detectar moneda</span>
+    <span class="kwd">if</span> <span class="str">'USD'</span> <span class="kwd">in</span> price_str:
+        <span class="kwd">return</span> value * <span class="num">3.7</span>  <span class="com"># tipo de cambio</span>
     <span class="kwd">else</span>:
-        nota = <span class="num">5</span> - (diferencia * <span class="num">10</span>)
-        <span class="kwd">return</span> <span class="func">round</span>(nota, <span class="num">2</span>)
+        <span class="kwd">return</span> value  <span class="com"># asumir soles</span>
+
+<span class="kwd">def</span> <span class="func">clean_area</span>(area_str):
+    <span class="str">"""Limpia el área y extrae el valor numérico"""</span>
+    <span class="kwd">if</span> pd.isna(area_str):
+        <span class="kwd">return</span> <span class="kwd">None</span>
+    
+    <span class="com"># Buscar número (puede tener comas)</span>
+    match = re.search(<span class="str">r'[\d,]+\.?\d*'</span>, <span class="func">str</span>(area_str).replace(<span class="str">','</span>, <span class="str">''</span>))
+    <span class="kwd">return</span> <span class="func">float</span>(match.group(<span class="num">0</span>)) <span class="kwd">if</span> match <span class="kwd">else</span> <span class="kwd">None</span>
+
+<span class="kwd">def</span> <span class="func">clean_bedroom_bathroom</span>(value):
+    <span class="str">"""Convierte '2 dormitorios' o '3 baños' a int"""</span>
+    <span class="kwd">if</span> pd.isna(value):
+        <span class="kwd">return</span> <span class="num">1</span>
+    
+    value_str = <span class="func">str</span>(value).strip()
+    match = re.search(<span class="str">r'(\d+)'</span>, value_str)
+    <span class="kwd">return</span> <span class="func">int</span>(match.group(<span class="num">1</span>)) <span class="kwd">if</span> match <span class="kwd">else</span> <span class="num">1</span>
+
+<span class="kwd">def</span> <span class="func">extract_district_from_location</span>(location):
+    <span class="str">"""
+    Extrae el distrito de una ubicación.
+    Para Lima: 'Ur. Santa Cruz, Miraflores, Lima, Lima' → 'MIRAFLORES'
+    """</span>
+    <span class="kwd">if</span> pd.isna(location):
+        <span class="kwd">return</span> <span class="kwd">None</span>
+    
+    loc = <span class="func">str</span>(location).strip().upper()
+    
+    <span class="com"># Patrón específico para Lima: algo, DISTRITO, Lima, Lima</span>
+    pattern = <span class="str">r',\s*([A-ZÑÁÉÍÓÚ\s\-]+),\s*LIMA,\s*LIMA\s*$'</span>
+    match = re.search(pattern, loc)
+    
+    <span class="kwd">if</span> match:
+        district = match.group(<span class="num">1</span>).strip()
+        
+        <span class="com"># Limpiar prefijos comunes</span>
+        district = re.sub(<span class="str">r'^(URB\.|URB|UR\.|UR|AV\.|AV|CALLE|JR\.|JR)\s+'</span>, <span class="str">''</span>, district)
+        
+        <span class="com"># Corregir nombres específicos</span>
+        corrections = {
+            <span class="str">'SANTIAGO DE SURCO'</span>: <span class="str">'SURCO'</span>,
+            <span class="str">'SAN MARTÍN DE PORRES'</span>: <span class="str">'SAN MARTIN DE PORRES'</span>,
+            <span class="str">'JESÚS MARÍA'</span>: <span class="str">'JESUS MARIA'</span>,
+            <span class="str">'MAGDALENA DEL MAR'</span>: <span class="str">'MAGDALENA DEL MAR'</span>,
+            <span class="str">'VILLA MARÍA DEL TRIUNFO'</span>: <span class="str">'VILLA MARIA DEL TRIUNFO'</span>,
+            <span class="str">'LURIGANCHO - CHOSICA'</span>: <span class="str">'LURIGANCHO'</span>,
+            <span class="str">'SANTA MARÍA DEL MAR'</span>: <span class="str">'SANTA MARIA DEL MAR'</span>
+        }
+        
+        <span class="kwd">for</span> wrong, correct <span class="kwd">in</span> corrections.items():
+            <span class="kwd">if</span> wrong <span class="kwd">in</span> district:
+                district = district.replace(wrong, correct)
+                <span class="kwd">break</span>
+        
+        <span class="kwd">return</span> district
+    
+    <span class="kwd">return</span> <span class="kwd">None</span>
+
+<span class="kwd">def</span> <span class="func">normalize_district_name</span>(district):
+    <span class="str">"""Normaliza nombres de distritos para coincidir con CSV"""</span>
+    <span class="kwd">if</span> pd.isna(district):
+        <span class="kwd">return</span> <span class="kwd">None</span>
+    
+    district_str = <span class="func">str</span>(district).upper().strip()
+    
+    <span class="com"># Lista exacta de distritos</span>
+    VALID_DISTRICTS = [
+        <span class="str">'ANCON'</span>, <span class="str">'ATE'</span>, <span class="str">'BARRANCO'</span>, <span class="str">'BREÑA'</span>, <span class="str">'CARABAYLLO'</span>, <span class="str">'CHACLACAYO'</span>,
+        <span class="str">'CHORRILLOS'</span>, <span class="str">'CIENEGUILLA'</span>, <span class="str">'COMAS'</span>, <span class="str">'EL AGUSTINO'</span>, <span class="str">'INDEPENDENCIA'</span>,
+        <span class="str">'JESUS MARIA'</span>, <span class="str">'LA MOLINA'</span>, <span class="str">'LA VICTORIA'</span>, <span class="str">'LIMA'</span>, <span class="str">'LINCE'</span>, <span class="str">'LOS OLIVOS'</span>,
+        <span class="str">'LURIGANCHO'</span>, <span class="str">'LURIN'</span>, <span class="str">'MAGDALENA DEL MAR'</span>, <span class="str">'MIRAFLORES'</span>, <span class="str">'PACHACAMAC'</span>,
+        <span class="str">'PUEBLO LIBRE'</span>, <span class="str">'PUENTE PIEDRA'</span>, <span class="str">'RIMAC'</span>, <span class="str">'SAN BARTOLO'</span>, <span class="str">'SAN BORJA'</span>,
+        <span class="str">'SAN ISIDRO'</span>, <span class="str">'SAN JUAN DE LURIGANCHO'</span>, <span class="str">'SAN JUAN DE MIRAFLORES'</span>,
+        <span class="str">'SAN LUIS'</span>, <span class="str">'SAN MARTIN DE PORRES'</span>, <span class="str">'SAN MIGUEL'</span>, <span class="str">'SANTA ANITA'</span>,
+        <span class="str">'SANTA MARIA DEL MAR'</span>, <span class="str">'SANTA ROSA'</span>, <span class="str">'SURCO'</span>, <span class="str">'SURQUILLO'</span>,
+        <span class="str">'VILLA EL SALVADOR'</span>, <span class="str">'VILLA MARIA DEL TRIUNFO'</span>, <span class="str">'PUNTA HERMOSA'</span>,
+        <span class="str">'PUNTA NEGRA'</span>, <span class="str">'PUCUSANA'</span>
+    ]
+    
+    <span class="kwd">if</span> district_str <span class="kwd">in</span> VALID_DISTRICTS:
+        <span class="kwd">return</span> district_str
+    
+    mappings = {
+        <span class="str">'SANTIAGO DE SURCO'</span>: <span class="str">'SURCO'</span>,
+        <span class="str">'LURIGANCHO - CHOSICA'</span>: <span class="str">'LURIGANCHO'</span>,
+        <span class="str">'SAN MARTÍN DE PORRES'</span>: <span class="str">'SAN MARTIN DE PORRES'</span>,
+        <span class="str">'JESÚS MARÍA'</span>: <span class="str">'JESUS MARIA'</span>,
+        <span class="str">'VILLA MARÍA DEL TRIUNFO'</span>: <span class="str">'VILLA MARIA DEL TRIUNFO'</span>,
+        <span class="str">'SANTA MARÍA DEL MAR'</span>: <span class="str">'SANTA MARIA DEL MAR'</span>
+    }
+    
+    <span class="kwd">for</span> wrong, correct <span class="kwd">in</span> mappings.items():
+        <span class="kwd">if</span> wrong <span class="kwd">in</span> district_str:
+            <span class="kwd">return</span> correct
+    
+    <span class="kwd">return</span> <span class="kwd">None</span>
+
+<span class="kwd">def</span> <span class="func">calculate_scores</span>(df):
+    <span class="str">"""Calcula scores para propiedades de Lima"""</span>
+    
+    <span class="func">print</span>(<span class="str">"🧹 Limpiando datos básicos..."</span>)
+    
+    <span class="com"># Limpiar datos básicos</span>
+    df[<span class="str">'price_clean'</span>] = df[<span class="str">'price'</span>].apply(clean_price)
+    df[<span class="str">'area_clean'</span>] = df[<span class="str">'area'</span>].apply(clean_area)
+    df[<span class="str">'bedroom_clean'</span>] = df[<span class="str">'bedroom'</span>].apply(clean_bedroom_bathroom)
+    df[<span class="str">'bathroom_clean'</span>] = df[<span class="str">'bathroom'</span>].apply(clean_bedroom_bathroom)
+    
+    <span class="com"># Año de construcción</span>
+    <span class="kwd">if</span> <span class="str">'year_contruction'</span> <span class="kwd">in</span> df.columns:
+        df[<span class="str">'year_contruction'</span>] = pd.to_numeric(df[<span class="str">'year_contruction'</span>], errors=<span class="str">'coerce'</span>)
+    df[<span class="str">'year_contruction'</span>] = df[<span class="str">'year_contruction'</span>].fillna(<span class="num">2000</span>)
+    
+    <span class="func">print</span>(<span class="str">"📍 Extrayendo distritos..."</span>)
+    
+    df[<span class="str">'district'</span>] = df[<span class="str">'location'</span>].apply(extract_district_from_location)
+    
+    <span class="com"># Filtrar SOLO propiedades con distrito válido de Lima</span>
+    initial_count = <span class="func">len</span>(df)
+    df = df[df[<span class="str">'district'</span>].notna()].copy()
+    <span class="func">print</span>(<span class="str">f"   Propiedades con distrito de Lima: {len(df)}/{initial_count}"</span>)
+    
+    df[<span class="str">'district'</span>] = df[<span class="str">'district'</span>].apply(normalize_district_name)
+    
+    <span class="com"># Cargar datos de seguridad y Merge</span>
+    security_df = pd.read_csv(<span class="str">"data/processed/security_by_district.csv"</span>)
+    security_df[<span class="str">"district_norm"</span>] = security_df[<span class="str">"district"</span>].apply(normalize_district_name)
+    
+    df = pd.merge(
+        df,
+        security_df[[<span class="str">"district_norm"</span>, <span class="str">"security_score"</span>]].rename(columns={<span class="str">"district_norm"</span>: <span class="str">"district"</span>}),
+        on=<span class="str">"district"</span>,
+        how=<span class="str">"left"</span>
+    )
+    
+    df[<span class="str">"safety_score"</span>] = df[<span class="str">"security_score"</span>].fillna(<span class="num">5.0</span>)
+    
+    <span class="func">print</span>(<span class="str">"💰 Calculando cost_score..."</span>)
+    
+    <span class="com"># COST_SCORE: precio por m² normalizado</span>
+    df[<span class="str">'cost_score'</span>] = <span class="num">5.0</span>
+    valid_mask = df[<span class="str">'price_clean'</span>].notna() & df[<span class="str">'area_clean'</span>].notna() & (df[<span class="str">'area_clean'</span>] > <span class="num">0</span>)
+    valid_data = df[valid_mask].copy()
+    
+    <span class="kwd">if</span> <span class="func">len</span>(valid_data) > <span class="num">0</span>:
+        valid_data[<span class="str">'price_per_m2'</span>] = valid_data[<span class="str">'price_clean'</span>] / valid_data[<span class="str">'area_clean'</span>]
+        max_price_m2 = valid_data[<span class="str">'price_per_m2'</span>].max()
+        
+        <span class="kwd">if</span> max_price_m2 > <span class="num">0</span>:
+            valid_data[<span class="str">'cost_score'</span>] = <span class="num">10</span> * (<span class="num">1</span> - valid_data[<span class="str">'price_per_m2'</span>] / max_price_m2)
+            valid_data[<span class="str">'cost_score'</span>] = valid_data[<span class="str">'cost_score'</span>].clip(<span class="num">0</span>, <span class="num">10</span>)
+        
+        df.loc[valid_data.index, <span class="str">'cost_score'</span>] = valid_data[<span class="str">'cost_score'</span>]
+    
+    <span class="func">print</span>(<span class="str">"🛋️ Calculando services_score..."</span>)
+    
+    size_score = (df[<span class="str">'bedroom_clean'</span>] + df[<span class="str">'bathroom_clean'</span>]) * <span class="num">1.5</span>
+    size_score = size_score.clip(<span class="num">0</span>, <span class="num">10</span>)
+    
+    age = <span class="num">2024</span> - df[<span class="str">'year_contruction'</span>]
+    age_score = <span class="num">10</span> * (<span class="num">1</span> - age / <span class="num">100</span>)
+    age_score = age_score.clip(<span class="num">0</span>, <span class="num">10</span>)
+    
+    df[<span class="str">'services_score'</span>] = (size_score * <span class="num">0.6</span> + age_score * <span class="num">0.4</span>).clip(<span class="num">0</span>, <span class="num">10</span>)
+    
+    <span class="func">print</span>(<span class="str">"🎯 Calculando score final..."</span>)
+    
+    df[<span class="str">'final_score'</span>] = (
+        df[<span class="str">'cost_score'</span>] * <span class="num">0.4</span> + 
+        df[<span class="str">'safety_score'</span>] * <span class="num">0.4</span> + 
+        df[<span class="str">'services_score'</span>] * <span class="num">0.2</span>
+    ).round(<span class="num">2</span>)
+    
+    df = df.sort_values(<span class="str">'final_score'</span>, ascending=<span class="kwd">False</span>)
+    
+    valid_for_display = df[
+        df[<span class="str">'price_clean'</span>].notna() & 
+        df[<span class="str">'area_clean'</span>].notna() & 
+        (df[<span class="str">'area_clean'</span>] > <span class="num">0</span>)
+    ].copy()
+    
+    <span class="kwd">return</span> df, valid_for_display
+
+<span class="kwd">def</span> <span class="func">main</span>():
+    <span class="func">print</span>(<span class="str">"="</span>*<span class="num">60</span>)
+    <span class="func">print</span>(<span class="str">"🏡 LIMA HOUSING ANALYTICS - PROCESADOR FINAL"</span>)
+    <span class="func">print</span>(<span class="str">"="</span>*<span class="num">60</span>)
+    
+    <span class="kwd">try</span>:
+        <span class="func">print</span>(<span class="str">"\n📥 Cargando dataset..."</span>)
+        df = pd.read_csv(<span class="str">'data/raw/dataset.csv'</span>, encoding=<span class="str">'utf-8'</span>)
+        
+        <span class="kwd">if</span> <span class="str">'operation_type'</span> <span class="kwd">in</span> df.columns:
+            df = df[df[<span class="str">'operation_type'</span>].str.contains(<span class="str">'alquiler'</span>, case=<span class="kwd">False</span>, na=<span class="kwd">False</span>)]
+        
+        df_scored, valid_data = <span class="func">calculate_scores</span>(df)
+        
+        <span class="func">print</span>(<span class="str">f"\n📊 RESULTADOS: {len(df_scored)} procesados"</span>)
+        
+        output_csv = <span class="str">'data/processed/scored_properties.csv'</span>
+        os.makedirs(os.path.dirname(output_csv), exist_ok=<span class="kwd">True</span>)
+        df_scored.to_csv(output_csv, index=<span class="kwd">False</span>, encoding=<span class="str">'utf-8-sig'</span>)
+        
+        <span class="com"># Preparar JSON para frontend (Simplificado para vista)</span>
+        <span class="func">print</span>(<span class="str">"\n🔄 Generando JSON..."</span>)
+        <span class="func">print</span>(<span class="str">"\n🎉 PROCESAMIENTO COMPLETADO!"</span>)
+        
+    <span class="kwd">except</span> <span class="cls">Exception</span> <span class="kwd">as</span> e:
+        <span class="func">print</span>(<span class="str">f"\n❌ ERROR: {e}"</span>)
+
+<span class="kwd">if</span> __name__ == <span class="str">"__main__"</span>:
+    <span class="func">main</span>()
                             </pre>
                         </div>
                     </div>
@@ -228,35 +416,65 @@ df = pd.read_csv(<span class="str">'dataset_final.csv'</span>)
                     <div class="tab-pane fade" id="app" role="tabpanel">
                         <div class="code-content">
                             <pre>
-<span class="kwd">from</span> flask <span class="kwd">import</span> Flask, render_template, request
-<span class="kwd">import</span> Google_places_api
-<span class="kwd">import</span> data_processor
+<span class="kwd">import</span> pandas <span class="kwd">as</span> pd
 
-<span class="cls">app</span> = Flask(__name__)
+<span class="com"># 1. Cargar CSV INEI</span>
+df = pd.read_csv(<span class="str">"data/raw/security_raw.csv"</span>, encoding=<span class="str">"latin1"</span>)
 
-<span class="cls">@app</span>.route(<span class="str">'/'</span>, methods=[<span class="str">'GET'</span>, <span class="str">'POST'</span>])
-<span class="kwd">def</span> <span class="func">home</span>():
-    <span class="kwd">if</span> request.method == <span class="str">'POST'</span>:
-        
-        <span class="com"># 1. Recibimos Inputs</span>
-        lugar = request.form[<span class="str">'lugar'</span>] 
-        precio = <span class="func">float</span>(request.form[<span class="str">'precio'</span>])
-        hab = <span class="func">int</span>(request.form[<span class="str">'hab'</span>])
+<span class="com"># 2. Filtrar SOLO Lima Metropolitana</span>
+df = df[df[<span class="str">"DPTO_HECHO_NEW"</span>].str.strip() == <span class="str">"LIMA METROPOLITANA"</span>]
 
-        <span class="com"># 2. Lógica Inteligente: Detectar Distrito</span>
-        <span class="kwd">if</span> <span class="str">","</span> <span class="kwd">in</span> lugar:
-            distrito = lugar.split(<span class="str">','</span>)[-<span class="num">1</span>].strip().upper()
-        <span class="kwd">else</span>:
-            distrito = <span class="str">"LIMA"</span>
+<span class="com"># 3. Filtrar SOLO provincia Lima</span>
+df = df[df[<span class="str">"PROV_HECHO"</span>].str.strip() == <span class="str">"LIMA"</span>]
 
-        <span class="com"># 3. Procesamiento de Datos</span>
-        nota_p = data_processor.evaluar_precio_mercado(distrito, precio, hab)
-        coords = Google_places_api.obtener_coordenadas(lugar)
-        analisis = Google_places_api.analizar_zona_google(coords)
+<span class="com"># 4. Limpiar distrito</span>
+df[<span class="str">"district"</span>] = (
+    df[<span class="str">"DIST_HECHO"</span>]
+    .astype(<span class="func">str</span>)
+    .str.upper()
+    .str.strip()
+)
 
-        <span class="kwd">return</span> render_template(<span class="str">'index.html'</span>, score=nota_p, data=analisis)
+<span class="com"># 5. Agrupar delitos por distrito</span>
+security = (
+    df.groupby(<span class="str">"district"</span>)[<span class="str">"cantidad"</span>]
+    .sum()
+    .reset_index()
+)
 
-    <span class="kwd">return</span> render_template(<span class="str">'index.html'</span>)
+security.rename(columns={<span class="str">"cantidad"</span>: <span class="str">"crime_count"</span>}, inplace=<span class="kwd">True</span>)
+
+
+<span class="com"># Normalizar nombres de distrito (encoding + formato)</span>
+security[<span class="str">"district"</span>] = (
+    security[<span class="str">"district"</span>]
+    .str.upper()
+    .str.replace(<span class="str">"Ã‘"</span>, <span class="str">"Ñ"</span>)
+    .str.strip()
+)
+
+
+max_crime = security[<span class="str">"crime_count"</span>].max()
+min_crime = security[<span class="str">"crime_count"</span>].min()
+
+security[<span class="str">"security_score"</span>] = (
+    <span class="num">10</span> - (
+        (security[<span class="str">"crime_count"</span>] - min_crime) /
+        (max_crime - min_crime) * <span class="num">10</span>
+    )
+).round(<span class="num">2</span>)
+
+
+<span class="com"># 6. Guardar resultado</span>
+security.to_csv(
+    <span class="str">"data/processed/security_by_district.csv"</span>,
+    index=<span class="kwd">False</span>,
+    encoding=<span class="str">"utf-8-sig"</span>
+)
+
+<span class="func">print</span>(<span class="str">"✅ Seguridad INEI procesada correctamente"</span>)
+<span class="func">print</span>(<span class="str">"📊 Distritos únicos:"</span>, security.shape[<span class="num">0</span>])
+<span class="func">print</span>(security.sort_values(<span class="str">"crime_count"</span>, ascending=<span class="kwd">False</span>).head())
                             </pre>
                         </div>
                     </div>
@@ -264,53 +482,6 @@ df = pd.read_csv(<span class="str">'dataset_final.csv'</span>)
                 </div>
             </div>
             <p class="text-center text-muted mt-3 small">Módulos principales del sistema.</p>
-        </div>
-    </section>
-
-    <section id="demo">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-6">
-                    <div class="card p-4 shadow-sm border-0">
-                        <h3 class="text-center mb-4">🏡 Ejecución del Sistema</h3>
-                        
-                        <form action="/" method="POST">
-                            <div class="mb-3">
-                                <label class="fw-bold">📍 Ubicación / Zona:</label>
-                                <input type="text" name="lugar" class="form-control form-control-lg" placeholder="Ej: Ceres, Ate" required>
-                                <div class="form-text text-muted">La API detectará las coordenadas y el distrito automáticamente.</div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="fw-bold">💰 Precio ($/m²):</label>
-                                <div class="input-group">
-                                    <span class="input-group-text">$</span>
-                                    <input type="number" name="precio" class="form-control" placeholder="Ej: 1500" min="0" required>
-                                </div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label class="fw-bold">🛏️ Habitaciones:</label>
-                                <input type="number" name="hab" class="form-control" placeholder="Ej: 3" min="1" max="10" value="3" required>
-                            </div>
-                            <button type="submit" class="btn btn-dark w-100 py-3 fw-bold">⚡ Buscar y Analizar</button>
-                    </form>
-
-                        {% if puntaje_final %}
-                        <hr class="my-4">
-                        <div class="text-center">
-                            <h4 class="mb-3">Resultado</h4>
-                            <div class="score-circle mb-3 shadow">{{ puntaje_final }}</div>
-                            <div class="d-flex justify-content-between px-3">
-                                <small>🛡️ Seg: <b>{{ notas.seguridad }}</b></small>
-                                <small>💰 Pre: <b>{{ notas.precio }}</b></small>
-                                <small>🎡 Ser: <b>{{ notas.servicios }}</b></small>
-                            </div>
-                        </div>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
 
