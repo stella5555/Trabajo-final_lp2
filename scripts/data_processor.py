@@ -1,7 +1,11 @@
-# SOLO ESTA VERSIÓN - ELIMINA TODO LO DEMÁS
+import pandas as pd
+import os
+import re
 
-
-
+def clean_price(price_str):
+    """Limpia y convierte precios a soles"""
+    if pd.isna(price_str):
+        return None
     
     price_str = str(price_str).upper().strip()
     
