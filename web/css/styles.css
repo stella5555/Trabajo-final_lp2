@@ -817,3 +817,673 @@ body {
     padding: 25px;
     border-radius: 10px;
 }
+/* ===== ESTILOS PARA EL DASHBOARD ===== */
+
+/* Notificaciones */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+/* Mensajes de error y sin resultados */
+.error-message, .no-results {
+    text-align: center;
+    padding: 40px 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin: 20px 0;
+}
+
+.error-message i, .no-results i {
+    font-size: 48px;
+    color: #ff6b6b;
+    margin-bottom: 20px;
+}
+
+.error-message h3, .no-results h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.error-message p, .no-results p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.results-warning {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    color: #856404;
+    padding: 12px 16px;
+    border-radius: 6px;
+    margin: 20px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.9em;
+}
+
+/* Cards de propiedades */
+.property-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.property-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.district-badge {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 6px 12px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+}
+
+.final-score {
+    font-size: 1.8em;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 8px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.score-excelente { background: #4CAF50; color: white; }
+.score-bueno { background: #2196F3; color: white; }
+.score-medio { background: #FF9800; color: white; }
+.score-bajo { background: #f44336; color: white; }
+
+.card-address {
+    color: #666;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+}
+
+.card-details-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-label {
+    color: #666;
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.detail-value {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.detail-value.price {
+    color: #4CAF50;
+}
+
+/* Score breakdown */
+.score-breakdown {
+    background: #f8f9fa;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.score-breakdown-title {
+    font-weight: bold;
+    margin-bottom: 12px;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.score-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bar-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9em;
+    margin-bottom: 2px;
+}
+
+.bar-container {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+}
+
+.score-bar:nth-child(1) .bar-fill { background: #4CAF50; }
+.score-bar:nth-child(2) .bar-fill { background: #2196F3; }
+.score-bar:nth-child(3) .bar-fill { background: #FF9800; }
+
+.score-formula {
+    text-align: center;
+    color: #666;
+    font-size: 0.85em;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+}
+
+/* Card footer */
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-view-details {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.9em;
+    transition: background 0.2s;
+}
+
+.btn-view-details:hover {
+    background: #1976d2;
+}
+
+.publish-date {
+    color: #666;
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Top districts */
+.top-districts .district-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    margin: 8px 0;
+    background: white;
+    border-radius: 6px;
+    border-left: 4px solid #2196F3;
+}
+
+.district-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.district-name small {
+    color: #666;
+    font-size: 0.85em;
+    margin-left: 8px;
+}
+
+/* Botones */
+.btn-primary {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.2s;
+}
+
+.btn-primary:hover {
+    background: #1976d2;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+    .card-details-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 576px) {
+    .card-details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .card-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+}
+/* === MEJORAS PARA EL DASHBOARD === */
+
+/* Tarjetas de propiedades */
+.property-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    margin-bottom: 24px;
+}
+
+.property-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+.property-image {
+    position: relative;
+    height: 180px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    overflow: hidden;
+}
+
+.property-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.property-score-overlay {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.property-content {
+    padding: 20px;
+}
+
+.property-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.property-district {
+    margin: 0;
+    color: #333;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.property-final-score {
+    font-size: 1.8em;
+    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 8px;
+    min-width: 60px;
+    text-align: center;
+}
+
+.property-title {
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 8px;
+    font-style: italic;
+}
+
+.property-address {
+    color: #888;
+    font-size: 0.9em;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+.property-details {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.detail-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 12px;
+}
+
+.detail-row:last-child {
+    margin-bottom: 0;
+}
+
+.detail-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-icon {
+    color: #667eea;
+    font-size: 1.2em;
+}
+
+.detail-label {
+    color: #666;
+    font-size: 0.85em;
+}
+
+.detail-value {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1em;
+}
+
+/* Score breakdown */
+.score-breakdown {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 20px;
+}
+
+.score-breakdown h4 {
+    margin: 0 0 16px 0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.score-item {
+    margin-bottom: 12px;
+}
+
+.score-item:last-child {
+    margin-bottom: 0;
+}
+
+.score-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.score-name {
+    font-weight: 500;
+    color: #555;
+}
+
+.score-value {
+    font-weight: bold;
+    color: #333;
+}
+
+.score-bar {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.score-item:nth-child(1) .bar-fill { background: #4CAF50; } /* Costo - Verde */
+.score-item:nth-child(2) .bar-fill { background: #2196F3; } /* Seguridad - Azul */
+.score-item:nth-child(3) .bar-fill { background: #FF9800; } /* Servicios - Naranja */
+
+.score-formula {
+    text-align: center;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #e0e0e0;
+    color: #666;
+    font-size: 0.85em;
+}
+
+.score-formula i {
+    margin-right: 4px;
+}
+
+/* Footer de tarjeta */
+.property-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    border-top: 1px solid #e0e0e0;
+}
+
+.btn-view-details {
+    background: #667eea;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+.btn-view-details:hover {
+    background: #5a67d8;
+    color: white;
+}
+
+.publish-date {
+    color: #666;
+    font-size: 0.85em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Top districts */
+.district-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+    background: white;
+    border-radius: 8px;
+    border-left: 4px solid #667eea;
+    transition: transform 0.2s;
+}
+
+.district-item:hover {
+    transform: translateX(4px);
+}
+
+.district-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.district-rank {
+    font-size: 1.2em;
+}
+
+.district-name {
+    font-weight: 500;
+    color: #333;
+}
+
+.district-stats {
+    text-align: right;
+}
+
+.district-stats small {
+    color: #666;
+    font-size: 0.8em;
+}
+
+/* Clases de score */
+.score-excelente { background: #4CAF50; color: white; }
+.score-bueno { background: #2196F3; color: white; }
+.score-medio { background: #FF9800; color: white; }
+.score-bajo { background: #f44336; color: white; }
+
+/* Loading y errores */
+.loading, .no-results, .error-message {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.loading i, .no-results i, .error-message i {
+    color: #667eea;
+    margin-bottom: 20px;
+}
+
+.loading p, .no-results p, .error-message p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.btn-retry, .btn-primary {
+    background: #667eea;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.3s;
+}
+
+.btn-retry:hover, .btn-primary:hover {
+    background: #5a67d8;
+}
+
+/* Notificaciones */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #4CAF50;
+    color: white;
+    padding: 16px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transform: translateX(120%);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 300px;
+}
+
+.notification.show {
+    transform: translateX(0);
+}
+
+.notification i {
+    font-size: 1.2em;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .property-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+    
+    .detail-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .property-footer {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+}

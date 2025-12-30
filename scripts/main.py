@@ -33,3 +33,15 @@ def main():
 
 if __name__ == "__main__":
     df = main()
+
+from scripts.api_enricher import main as enrich_data
+
+def main():
+    ...
+    processor = DataProcessor()
+    df = processor.load_and_process()
+
+    print("\n3️⃣ ENRIQUECIENDO CON APIs...")
+    enrich_data()
+
+    print("\n✅ PIPELINE COMPLETO")

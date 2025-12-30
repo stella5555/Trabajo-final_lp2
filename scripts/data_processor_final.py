@@ -1,4 +1,3 @@
-# SOLO ESTA VERSIÓN - ELIMINA TODO LO DEMÁS
 import pandas as pd
 import os
 import re

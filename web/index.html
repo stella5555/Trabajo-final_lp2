@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏡 Lima Housing Analytics - Dashboard</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-home"></i>
+                <h1>Lima Housing Analytics</h1>
+            </div>
+            <p class="tagline">Dashboard de análisis inmobiliario con datos reales de Properati Lima 2023</p>
+        </header>
+
+        <!-- STATS BAR -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <i class="fas fa-building"></i>
+                <div>
+                    <h3 id="total-props">1,079</h3>
+                    <p>Propiedades</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-map-marker-alt"></i>
+                <div>
+                    <h3 id="total-districts">--</h3>
+                    <p>Distritos</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-chart-line"></i>
+                <div>
+                    <h3 id="avg-score">--</h3>
+                    <p>Score Promedio</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-money-bill-wave"></i>
+                <div>
+                    <h3 id="avg-price">--</h3>
+                    <p>Precio Promedio</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ESTADÍSTICAS DETALLADAS (NUEVO) -->
+        <div id="stats-container">
+            <!-- Se llenará automáticamente con JavaScript -->
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="main-content">
+            <!-- LEFT: FILTERS & CONTROLS -->
+            <div class="sidebar">
+                <div class="filter-section">
+                    <h3><i class="fas fa-filter"></i> Filtros</h3>
+                    
+                    <div class="filter-group">
+                        <label for="districtFilter"><i class="fas fa-map-pin"></i> Distrito</label>
+                        <select id="districtFilter" class="filter-select">
+                            <option value="all">Todos los distritos</option>
+                            <!-- Se llenará con JS -->
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+    <label for="priceFilter">
+        <i class="fas fa-money-bill"></i>
+        Precio Máx: <span id="priceValue">S/ 50,000</span>
+    </label>
+    <input type="range"
+           id="priceFilter"
+           min="500"
+           max="50000"
+           value="50000"
+           step="500"
+           class="filter-slider">
+</div>
+
+<div class="filter-group">
+    <label for="scoreFilter">
+        <i class="fas fa-star"></i>
+        Score Mín: <span id="scoreValue">0.0</span>
+    </label>
+    <input type="range"
+           id="scoreFilter"
+           min="0"
+           max="10"
+           step="0.5"
+           value="0"
+           class="filter-slider">
+</div>
+
+
+                    <div class="filter-group">
+                        <label for="bedroomsFilter"><i class="fas fa-bed"></i> Habitaciones</label>
+                        <select id="bedroomsFilter" class="filter-select">
+                            <option value="0">Cualquiera</option>
+                            <option value="1">1</option>
+                            <option value="2">2</option>
+                            <option value="3">3</option>
+                            <option value="4">4</option>
+                            <option value="5">5 o más</option>
+                        </select>
+                    </div>
+
+                    <button id="resetFilters" class="btn-reset">
+                        <i class="fas fa-redo"></i> Reiniciar Filtros
+                    </button>
+                </div>
+
+                <!-- TOP DISTRICTS -->
+                <div class="top-districts">
+                    <h3><i class="fas fa-trophy"></i> Top 5 Distritos</h3>
+                    <div id="topDistrictsList">
+                        <div class="district-item">
+                            <div class="district-name">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </div>
+                            <div class="district-score">
+                                Cargando...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- INFO DEL PROYECTO -->
+                <div class="project-info">
+                    <h3><i class="fas fa-info-circle"></i> Sobre el Proyecto</h3>
+                    <p>Este dashboard analiza <strong>1,079 propiedades reales</strong> de Properati Lima 2023.</p>
+                    <p><strong>Fórmula de scoring:</strong></p>
+                    <div class="formula-box">
+                        <code>Score = (Costo×0.4) + (Seguridad×0.4) + (Servicios×0.2)</code>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: PROPERTIES GRID -->
+            <div class="content">
+                <div class="content-header">
+                    <h2><i class="fas fa-list"></i> Propiedades: <span id="propsCount">--</span> encontradas</h2>
+                    <div class="sort-controls">
+                        <label for="sortSelect"><i class="fas fa-sort"></i> Ordenar por:</label>
+                        <select id="sortSelect" class="sort-select">
+                            <option value="final_score">Mejor Score</option>
+                            <option value="price_clean">Precio (Bajo a Alto)</option>
+                            <option value="price_clean_desc">Precio (Alto a Bajo)</option>
+                            <option value="area_clean">Área Mayor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- PROPERTIES CONTAINER (CORREGIDO) -->
+                <div id="properties-container">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>Cargando 1,079 propiedades reales...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
+        <footer class="footer">
+            <p><strong>Lima Housing Analytics</strong> | Proyecto Final LP2 - Análisis de Precios Inmobiliarios vs. Calidad de Vida</p>
+            <p class="data-info">
+                <i class="fas fa-database"></i> 
+                <span id="dataSource">Dataset Properati Lima 2023 (1,079 propiedades reales)</span>
+            </p>
+            <p class="formula-info">
+                <i class="fas fa-calculator"></i> 
+                Fórmula aplicada: <strong>Score Final = (Costo×0.4 + Seguridad×0.4 + Servicios×0.2)</strong>
+            </p>
+        </footer>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/dashboard.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // Script adicional para manejar filtros básicos
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configurar sliders
+            const priceSlider = document.getElementById('priceFilter');
+            const priceValue = document.getElementById('priceValue');
+            const scoreSlider = document.getElementById('scoreFilter');
+            const scoreValue = document.getElementById('scoreValue');
+            
+            priceSlider.addEventListener('input', function() {
+                priceValue.textContent = 'S/ ' + parseInt(this.value).toLocaleString('es-PE');
+            });
+            
+            scoreSlider.addEventListener('input', function() {
+                scoreValue.textContent = parseFloat(this.value).toFixed(1);
+            });
+            
+            // Reiniciar filtros
+            document.getElementById('resetFilters').addEventListener('click', function() {
+                priceSlider.value = 50000;
+                priceValue.textContent = 'S/ 50,000';
+                
+                scoreSlider.value = 0;
+                scoreValue.textContent = '0.0';
+
+                document.getElementById('districtFilter').value = 'all';
+                document.getElementById('bedroomsFilter').value = '0';
+                document.getElementById('sortSelect').value = 'final_score';
+                
+                // Mostrar mensaje
+                alert('Filtros reiniciados. Recarga la página para ver todas las propiedades.');
+            });
+        });
+    </script>
+</body>
+</html>
