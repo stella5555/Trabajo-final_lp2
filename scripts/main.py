@@ -26,7 +26,7 @@ def main():
     # google_api = GoogleMapsAPI()
     # df = google_api.enrich_with_places(df)
     
-    print("\n✅ PIPELINE COMPLETADO")
+    print("\nPIPELINE COMPLETADO")
     print(f"Datos procesados: {len(df)} registros")
     
     return df
@@ -40,8 +40,3 @@ def main():
     ...
     processor = DataProcessor()
     df = processor.load_and_process()
-
-    print("\n3️⃣ ENRIQUECIENDO CON APIs...")
-    enrich_data()
-
-    print("\n✅ PIPELINE COMPLETO")
